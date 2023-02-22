@@ -1,7 +1,7 @@
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import UserContextProvider from "context/UserContext";
-import ApiContextProvider from "context/ApiContext";
+import { UserContextProvider } from "context/UserContext";
+import { ApiContextProvider } from "context/ApiContext";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./pages/global/Navbar";
 import Sidebar from "./pages/global/Sidebar";
@@ -11,6 +11,7 @@ import Team from "./pages/team";
 import Invoices from "./pages/invoices";
 import Contacts from "./pages/contacts";
 import LoginPage from "pages/login";
+import RegisterPage from "pages/register";
 // import Bar from "./pages/bar";
 // import Form from "./pages/form";
 // import Line from "./pages/line";
@@ -34,6 +35,7 @@ function App() {
                 <Navbar />
                 <Routes>
                   <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/team" element={<Team />} />
                   <Route path="/contacts" element={<Contacts />} />

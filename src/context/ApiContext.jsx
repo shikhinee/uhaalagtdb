@@ -36,11 +36,34 @@ export const ApiContext = createContext({
 });
 
 // Define the provider component
-export const ApiContextProvider = ({ children }) => {
+const ApiContextProvider = ({ children }) => {
   return (
     <ApiContext.Provider value={{ makeRequest, baseUrl }}>
       {children}
     </ApiContext.Provider>
   );
 };
-export default ApiContextProvider;
+
+// Define a function to register a user
+const registerUser = async (username, password) => {
+  // Generate an 8-digit user ID
+  const userId = Math.floor(Math.random() * 100000000);
+
+  // Define the user data
+  const userData = {
+    userID: userId,
+    username: username,
+    password: password,
+    role: "user",
+    branchID: 0,
+    userStatus: "Requested",
+    depID: 0,
+  };
+
+  // Make the register user request
+  const response = await makeRequest("user/register", "POST", userData);
+
+  return response;
+};
+
+export { registerUser, ApiContextProvider };
