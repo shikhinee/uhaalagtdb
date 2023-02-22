@@ -6,6 +6,7 @@ const baseUrl = process.env.REACT_APP_API_BASE_URL;
 // Define your headers
 const headers = {
   "Content-Type": "application/json",
+  authorization: localStorage.getItem("token"),
 };
 
 // Define a reusable function to make API requests

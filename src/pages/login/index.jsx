@@ -12,7 +12,8 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     const success = await login(username, password);
-    if (success) {
+    if (success?.success) {
+      await localStorage.setItem("token", success.value);
       navigate("/");
     }
   };
