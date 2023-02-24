@@ -20,15 +20,11 @@ export const UserContextProvider = ({ children }) => {
     try {
       const data = await makeRequest("login", "POST", { username, password });
       localStorage.setItem("token", data.value); // Save the token in local storage
-      const searchResult = await searchUser(data.value); // Call searchUser only after user has logged in
-      if (searchResult) {
-        setIsAuthenticated(true);
-        return true;
-      }
+      return await searchUser(data.value); // Call searchUser only after user has logged in
     } catch (error) {
       console.error(error);
+      return false;
     }
-    return false;
   };
 
   const logout = () => {
@@ -45,7 +41,7 @@ export const UserContextProvider = ({ children }) => {
         `user/searchUser?username=${username}`,
         "GET"
       );
-      setUser(data);
+      setUser(data.value);
       setIsAuthenticated(true);
       return true;
     } catch (error) {
@@ -54,11 +50,12 @@ export const UserContextProvider = ({ children }) => {
     }
   };
 
-  // Check if there is a token in the local storage
-  const token = localStorage.getItem("token");
-  if (token) {
-    searchUser(token);
-  }
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      searchUser(token);
+    }
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, isAuthenticated, login, logout }}>
@@ -66,3 +63,5 @@ export const UserContextProvider = ({ children }) => {
     </UserContext.Provider>
   );
 };
+
+export const useUserContext = () => useContext(UserContext);

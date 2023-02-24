@@ -4,13 +4,19 @@ import React, { createContext } from "react";
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 // Define your headers
-const headers = {
-  "Content-Type": "application/json",
-  authorization: localStorage.getItem("token"),
-};
+// const headers = {
+//   "Content-Type": "application/json",
+//   authorization: localStorage.getItem("token"),
+// };
 
 // Define a reusable function to make API requests
 const makeRequest = async (url, method = "GET", data = null) => {
+  const token = localStorage.getItem("token"); // Get the token from local storage
+  const headers = {
+    "Content-Type": "application/json",
+    authorization: token ? token : "", // Use the token if it exists, or an empty string if it doesn't
+  };
+
   const options = {
     method,
     headers,
@@ -29,7 +35,6 @@ const makeRequest = async (url, method = "GET", data = null) => {
 
   return json;
 };
-
 // Create the context
 export const ApiContext = createContext({
   makeRequest: makeRequest,

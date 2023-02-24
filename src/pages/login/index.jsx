@@ -1,21 +1,15 @@
-import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
-import { Button, TextField } from "@mui/material";
+import { useState } from "react";
+import { Button, TextField, Typography } from "@mui/material";
+import { useLogin } from "hooks/useLogin";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useContext(UserContext);
-  const navigate = useNavigate();
+  const { login, error, isLoading } = useLogin();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const success = await login(username, password);
-    if (success?.success) {
-      await localStorage.setItem("token", success.value);
-      navigate("/");
-    }
+    await login(username, password);
   };
 
   return (
@@ -36,9 +30,10 @@ const LoginPage = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button type="submit" variant="contained">
+      <Button disabled={isLoading} type="submit" variant="contained">
         Log in
       </Button>
+      {error && <Typography variant="h4">{error}</Typography>}
     </form>
   );
 };
