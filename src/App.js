@@ -1,6 +1,6 @@
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { AuthContextProvider } from "context/AuthContext";
+import { GlobalProvider } from "context/state";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./pages/global/Navbar";
 import Sidebar from "./pages/global/Sidebar";
@@ -11,19 +11,12 @@ import Invoices from "./pages/invoices";
 import Contacts from "./pages/contacts";
 import LoginPage from "pages/login";
 import RegisterPage from "pages/register";
-// import Bar from "./pages/bar";
-// import Form from "./pages/form";
-// import Line from "./pages/line";
-// import Pie from "./pages/pie";
-// import FAQ from "./pages/faq";
-// import Geography from "./pages/geography";
-// import Calendar from "./pages/calendar";
 
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   return (
-    <AuthContextProvider>
+    <GlobalProvider>
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
@@ -43,7 +36,7 @@ function App() {
           </div>
         </ThemeProvider>
       </ColorModeContext.Provider>
-    </AuthContextProvider>
+    </GlobalProvider>
   );
 }
 

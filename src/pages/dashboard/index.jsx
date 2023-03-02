@@ -1,15 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import React, { useContext } from "react";
 import Header from "../../components/Header";
-import { UserContext } from "context/UserContext";
+import { GlobalContext } from "context/state";
 
 const Dashboard = () => {
-  const { user } = useContext(UserContext);
-
+  const user = useContext(GlobalContext);
+  console.log(user);
   // Check if user data is available
-  if (!user) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <Box m="20px">

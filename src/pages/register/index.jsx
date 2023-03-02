@@ -1,14 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, TextField, Typography } from "@mui/material";
-import { useRegister } from "hooks/useRegister";
+import { GlobalContext } from "context/state";
 
 const RegisterPage = () => {
+  const context = useContext(GlobalContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { register, error, isLoading } = useRegister();
-  const handleRegister = async (e) => {
+  const navigate = useNavigate();
+  const userID = Math.floor(10000000 + Math.random() * 90000000);
+  const handleRegister = (e) => {
     e.preventDefault();
-    await register(username, password);
+    context
+      .request({
+        url: `user/register`,
+        model: "login",
+        method: "POST",
+        ismessage: true,
+        body: {
+          userID: userID,
+          username: username,
+          password: password,
+          role: "user",
+          branchID: 0,
+          userStatus: "Requested",
+          depID: 0,
+        },
+      })
+      .then((res) => {
+        if (res.success) {
+          navigate("/");
+        }
+      });
   };
 
   return (
@@ -27,14 +50,9 @@ const RegisterPage = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button disablled={isLoading} type="submit" variant="contained">
+      <Button type="submit" variant="contained">
         Register
       </Button>
-      {error && (
-        <Typography variant="h4" className="error">
-          {error}
-        </Typography>
-      )}
     </form>
   );
 };
