@@ -27,7 +27,6 @@ export default function appReducer(state, action) {
       return {
         ...state,
         islogin: action.response ? true : false,
-        _auth: action.response,
       };
     }
     case "update": {
@@ -35,6 +34,10 @@ export default function appReducer(state, action) {
         ...state,
         update: action.response,
       };
+    }
+    case "setmodel": {
+      state[`res${action.model}`] = action.response;
+      return { ...state };
     }
     case "phoneno": {
       return {

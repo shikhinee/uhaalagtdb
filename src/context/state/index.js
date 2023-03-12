@@ -1,5 +1,4 @@
 import React, { createContext, useReducer } from "react";
-import * as Context from "../";
 import appReducer from "../reducer";
 import { fetchRequest } from "../fetch";
 
@@ -21,7 +20,7 @@ export const GlobalProvider = (props) => {
     };
   };
 
-  const request = async ({ url, model, body, method = "GET", isfile }) => {
+  const request = async ({ url, model, body, method = "GET", token, isfile }) => {
     try {
       if (isfile && body) {
         let formData = new FormData();
@@ -40,8 +39,9 @@ export const GlobalProvider = (props) => {
         model: model ? models[model] : null,
         dispatchEvent: dispatch,
         isfile: isfile,
+        token: token,
       });
-
+      console.log("token", token);
       /* notification: notification, */
       return res;
     } catch (error) {
@@ -49,6 +49,10 @@ export const GlobalProvider = (props) => {
     }
   };
 
+  const setlogin = (islogin) =>
+    dispatch({ type: "login", response: islogin });
+    const setModel = ({ model, res }) =>
+    dispatch({ type: "setmodel", model: model, response: res });
   const getUserRequests = async ({
     url,
     model,

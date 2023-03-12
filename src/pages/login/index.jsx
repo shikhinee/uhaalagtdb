@@ -8,6 +8,25 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  console.log(context);
+  const onSuccessLogin = async ({ token }) => {
+      // context.setModel({ model: "token", res: token });
+      if (context.reslogin.token) {
+      context.request({
+        url: "branch/getBranches",
+        model: "getBranches",
+        token: context.reslogin.token,
+      });    
+        context.request({
+        url: `user/getAllUsers?limit=2&position=2`,
+        model: "getAllUsers",
+        token: context.reslogin.token,
+      });
+    }
+
+
+      navigate("/");
+  };
   const handleLogin = async (e) => {
     e.preventDefault();
     context
@@ -20,9 +39,11 @@ const LoginPage = () => {
           password: password,
         },
       })
-      .then((res) => {
+      .then(async (res) => {
         if (res.success) {
-          navigate("/");
+          await localStorage.setItem("token", JSON.stringify(res.value.token));
+          onSuccessLogin(res.value);
+          console.log(context.reslogin.token)
         }
       });
   };

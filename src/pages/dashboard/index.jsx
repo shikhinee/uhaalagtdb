@@ -2,27 +2,26 @@ import { Box, Typography } from "@mui/material";
 import React, { useContext } from "react";
 import Header from "../../components/Header";
 import { GlobalContext } from "context/state";
-
+import jwtDecode from "jwt-decode";
 const Dashboard = () => {
-  const user = useContext(GlobalContext);
-  console.log(user);
-  // Check if user data is available
-
+  const context = useContext(GlobalContext);
+  console.log("context", context);
+  // Check if context data is available
   return (
     <Box m="20px">
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
         <Typography variant="h5">
-          Welcome back, {user.username} ({user.role})
+          Welcome back, {context.username} ({context.role})
         </Typography>
       </Box>
       <Box mt="20px">
-        <Typography variant="body1">Your User ID is: {user.userID}</Typography>
+        <Typography variant="body1">Your User ID is:: {context.contextID}</Typography>
         <Typography variant="body1">
-          Your Branch ID is: {user.branchID}
+          Your Branch ID is: {context.branchID}
         </Typography>
         <Typography variant="body1">
-          Your Department ID is: {user.depID}
+          Your Department ID is: {context.depID}
         </Typography>
       </Box>
     </Box>
