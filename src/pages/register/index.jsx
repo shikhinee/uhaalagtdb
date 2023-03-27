@@ -21,7 +21,7 @@ const RegisterPage = () => {
           userID: userID,
           username: username,
           password: password,
-          role: "user",
+          role: "branchAdmin",
           branchID: 0,
           userStatus: "Requested",
           depID: 0,

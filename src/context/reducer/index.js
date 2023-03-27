@@ -15,7 +15,12 @@ export default function appReducer(state, action) {
       state[`err_${model}`] = false;
       return { ...state };
     }
-
+    case "setRole": {
+      return {
+        ...state,
+        role: action.role,
+      };
+    }
     case "response": {
       state[`res${model}`] = action.response.value
         ? action.response.value
@@ -23,12 +28,8 @@ export default function appReducer(state, action) {
       state[`is${model}`] = false;
       return { ...state };
     }
-    case "login": {
-      return {
-        ...state,
-        islogin: action.response ? true : false,
-      };
-    }
+    case "login":
+      return { ...state, islogin: action.response };
     case "update": {
       return {
         ...state,

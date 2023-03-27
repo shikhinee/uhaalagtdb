@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useState } from "react";
 import appReducer from "../reducer";
 import { fetchRequest } from "../fetch";
 
@@ -7,11 +7,20 @@ const models = {};
 const baseURL = `http://10.150.10.47:8875/api/`;
 
 export const GlobalContext = createContext();
-const initialState = {};
+const initialState = {
+  islogin: Boolean(JSON.parse(localStorage.getItem("token"))),
+};
 
 export const GlobalProvider = (props) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
+  const [islogin, setlogin] = useState(initialState.islogin);
+  const login = () => {
+    setlogin(true);
+  };
 
+  const logout = () => {
+    setlogin(false);
+  };
   const addmodel = ({ model }) => {
     models[model] = {
       request: `request_${model}`,
@@ -20,7 +29,14 @@ export const GlobalProvider = (props) => {
     };
   };
 
-  const request = async ({ url, model, body, method = "GET", token, isfile }) => {
+  const request = async ({
+    url,
+    model,
+    body,
+    method = "GET",
+    token,
+    isfile,
+  }) => {
     try {
       if (isfile && body) {
         let formData = new FormData();
@@ -48,11 +64,11 @@ export const GlobalProvider = (props) => {
       console.log("%c 🍬 error: ", error);
     }
   };
-
-  const setlogin = (islogin) =>
-    dispatch({ type: "login", response: islogin });
-    const setModel = ({ model, res }) =>
+  const setModel = ({ model, res }) =>
     dispatch({ type: "setmodel", model: model, response: res });
+  const setRole = (role) => {
+    dispatch({ type: "setRole", role: role });
+  };
   const getUserRequests = async ({
     url,
     model,
@@ -86,6 +102,12 @@ export const GlobalProvider = (props) => {
           ...state,
           request,
           getUserRequests,
+          setModel,
+          setRole,
+          setlogin,
+          login,
+          logout,
+          islogin,
         }}
       >
         {props.children}
