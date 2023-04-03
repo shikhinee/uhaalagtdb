@@ -1,6 +1,7 @@
 import { ColorModeContext, useMode } from "./theme";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider, Snackbar } from "@mui/material";
 import { GlobalProvider } from "context/state";
+import GlobalAlert from "components/GlobalAlert";
 import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import Navbar from "./pages/global/Navbar";
 import Sidebar from "./pages/global/Sidebar";
@@ -11,8 +12,11 @@ import Team from "./pages/team";
 import Invoices from "./pages/invoices";
 import Contacts from "./pages/contacts";
 import LoginPage from "pages/login";
+import Branch from "pages/branches";
+import Departments from "pages/departments";
 import RegisterPage from "pages/register";
 import RoleBasedElement from "components/RoleBasedElement";
+import { SnackbarProvider } from "notistack";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -43,6 +47,9 @@ function AppContent({ location, isSidebar }) {
     <>
       {showLayout && <Sidebar isSidebar={isSidebar} />}
       <main className="content">
+        <Snackbar open={alert.open}>
+          <GlobalAlert />
+        </Snackbar>
         {showLayout && <Navbar />}
         <Routes>
           <Route
@@ -72,6 +79,34 @@ function AppContent({ location, isSidebar }) {
                 //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
                 // >
                 <Team />
+              ) : (
+                // {/* </RoleBasedElement> */}
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+          <Route
+            path="/departments/:branchID"
+            element={
+              islogin ? (
+                // <RoleBasedElement
+                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
+                // >
+                <Departments />
+              ) : (
+                // {/* </RoleBasedElement> */}
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+          <Route
+            path="/branch"
+            element={
+              islogin ? (
+                // <RoleBasedElement
+                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
+                // >
+                <Branch />
               ) : (
                 // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
