@@ -14,6 +14,9 @@ import Contacts from "./pages/contacts";
 import LoginPage from "pages/login";
 import Branch from "pages/branches";
 import Departments from "pages/departments";
+import Cards from "pages/cards";
+import AddCard from "pages/addCard";
+import EditCard from "pages/editCard";
 import RegisterPage from "pages/register";
 import RoleBasedElement from "components/RoleBasedElement";
 import { SnackbarProvider } from "notistack";
@@ -107,6 +110,48 @@ function AppContent({ location, isSidebar }) {
                 //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
                 // >
                 <Branch />
+              ) : (
+                // {/* </RoleBasedElement> */}
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+          <Route
+            path="/cards"
+            element={
+              islogin ? (
+                // <RoleBasedElement
+                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
+                // >
+                <Cards />
+              ) : (
+                // {/* </RoleBasedElement> */}
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+          <Route
+            path="/add"
+            element={
+              islogin ? (
+                // <RoleBasedElement
+                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
+                // >
+                <AddCard />
+              ) : (
+                // {/* </RoleBasedElement> */}
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+          <Route
+            path="/edit"
+            element={
+              islogin ? (
+                // <RoleBasedElement
+                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
+                // >
+                <EditCard />
               ) : (
                 // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
