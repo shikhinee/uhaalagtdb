@@ -121,10 +121,10 @@ const Departments = () => {
 
   const columns = [
     { field: "depID", headerName: "ID" },
-    { field: "depName", headerName: "Name", flex: 1 },
+    { field: "depName", headerName: "Нэр", flex: 1 },
     {
       field: "edit",
-      headerName: "Edit",
+      headerName: "Засах",
       sortable: false,
       filterable: false,
       width: 120,
@@ -135,14 +135,14 @@ const Departments = () => {
             color="primary"
             onClick={() => handleEditClick(params.row)}
           >
-            Edit
+            Засах
           </Button>
         );
       },
     },
     {
       field: "delete",
-      headerName: "Delete",
+      headerName: "Устгах",
       sortable: false,
       filterable: false,
       width: 120,
@@ -153,7 +153,7 @@ const Departments = () => {
             color="secondary"
             onClick={() => handleDeleteClick(params.row)}
           >
-            Delete
+            Устгах
           </Button>
         );
       },
@@ -163,8 +163,8 @@ const Departments = () => {
   return (
     <Box m="20px">
       <Header
-        title="DEPARTMENTS"
-        subtitle={`Managing Departments in Branch ${branchID}`}
+        title="АНГИЛЛУУД"
+        subtitle={`Тасгийн ${branchID} дугаартай салбарын ангиллуудыг зохион байгуулах`}
       />
       <Button
         variant="contained"
@@ -172,8 +172,9 @@ const Departments = () => {
         onClick={() => setOpenAddModal(true)}
         sx={{ mt: 2 }}
       >
-        Add Department
+        Ангилал нэмэх
       </Button>
+      {/* Add Department Modal */}
       <Modal
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
@@ -195,28 +196,30 @@ const Departments = () => {
           }}
         >
           <Typography id="add-department-modal" variant="h6" component="h2">
-            Add Department
+            Ангилал нэмэх
           </Typography>
           <TextField
             autoFocus
             margin="dense"
-            id="depName"
-            label="Department Name"
+            id="depname"
+            label="Ангиллын нэр"
             type="text"
             fullWidth
+            variant="outlined"
             value={newDepartment}
             onChange={(e) => setNewDepartment(e.target.value)}
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end", pt: 2 }}>
             <Button onClick={() => setOpenAddModal(false)} color="primary">
-              Cancel
+              Цуцлах
             </Button>
             <Button onClick={handleAddDepartment} color="primary">
-              Add
+              Нэмэх
             </Button>
           </Box>
         </Box>
       </Modal>
+      {/* Edit Department Modal */}
       <Modal
         open={openEditModal}
         onClose={() => setOpenEditModal(false)}
@@ -238,33 +241,35 @@ const Departments = () => {
           }}
         >
           <Typography id="edit-department-modal" variant="h6" component="h2">
-            Edit Department
+            Ангилал засах
           </Typography>
           <TextField
             autoFocus
             margin="dense"
             id="depName"
-            label="Department Name"
+            label="Ангиллын нэр"
             type="text"
             fullWidth
-            value={editedDepartment?.depName || ""}
+            variant="outlined"
+            value={editedDepartment?.depName}
             onChange={(e) =>
-              setEditedDepartment((prev) => ({
-                ...prev,
+              setEditedDepartment({
+                ...editedDepartment,
                 depName: e.target.value,
-              }))
+              })
             }
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end", pt: 2 }}>
             <Button onClick={() => setOpenEditModal(false)} color="primary">
-              Cancel
+              Цуцлах
             </Button>
             <Button onClick={handleEditConfirm} color="primary">
-              Save
+              Засах
             </Button>
           </Box>
         </Box>
       </Modal>
+      {/* Delete Department Modal */}
       <Modal
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
@@ -285,38 +290,31 @@ const Departments = () => {
             p: 4,
           }}
         >
-          <Typography
-            id="delete-department-modal"
-            variant="h6"
-            component="h2"
-            color="error"
-          >
-            Delete Department
+          <Typography id="delete-department-modal" variant="h6" component="h2">
+            Ангилал устгах
           </Typography>
-          <Typography sx={{ mt: 2 }}>
-            Are you sure you want to delete the department "
-            {departmentToDelete?.depName}"?
+          <Typography variant="body1" gutterBottom>
+            Та энэ ангиллыг устгахдаа итгэлтэй байна уу?
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "flex-end", pt: 2 }}>
             <Button onClick={() => setOpenDeleteModal(false)} color="primary">
-              Cancel
+              Цуцлах
             </Button>
-            <Button onClick={handleDeleteConfirm} color="error">
-              Delete
+            <Button onClick={handleDeleteConfirm} color="secondary">
+              Устгах
             </Button>
           </Box>
         </Box>
       </Modal>
-      <Box height={400} width="100%" sx={{ mt: 2 }}>
-        <DataGrid
-          rows={departments}
-          columns={columns}
-          pageSize={5}
-          getRowId={(row) => row.depID}
-          rowsPerPageOptions={[5]}
-          disableSelectionOnClick
-        />
-      </Box>
+      <DataGrid
+        rows={departments}
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5]}
+        getRowId={(row) => row.depID}
+        style={{ height: 400, width: "100%" }}
+        sx={{ mt: 2 }}
+      />
     </Box>
   );
 };

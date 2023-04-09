@@ -45,14 +45,6 @@ const Branch = () => {
 
     fetchBranches();
   }, []);
-  const handleCellClick = (params, event) => {
-    if (
-      event.target.tagName === "DIV" &&
-      event.target.classList.contains("MuiDataGrid-cell")
-    ) {
-      navigate(`/departments/${params.row.branchID}`);
-    }
-  };
   const handleAddConfirm = async () => {
     const body = {
       branchID: generateRandomID(),
@@ -124,47 +116,86 @@ const Branch = () => {
 
     setOpenModal(false);
   };
+  const handleViewDepartments = (branchID) => {
+    navigate(`/departments/${branchID}`);
+  };
+
   const columns = [
-    { field: "branchID", headerName: "ID" },
+    { field: "branchID", headerName: "ID", disableClickEventBubbling: true },
     {
       field: "branchName",
-      headerName: "Name",
+      headerName: "Нэр",
       flex: 1,
-      // Add the cell click handler
-      cellClassName: "clickable",
+      disableClickEventBubbling: true,
     },
     {
       field: "edit",
-      headerName: "Edit",
+      headerName: "Засах",
       sortable: false,
       filterable: false,
       width: 120,
+      disableClickEventBubbling: true,
       renderCell: (params) => {
         return (
           <Button
             variant="contained"
-            color="primary"
+            style={{
+              backgroundColor: colors.greenAccent[600],
+              "&:hover": {
+                backgroundColor: colors.greenAccent[700],
+              },
+            }}
             onClick={() => handleEditClick(params.row)}
           >
-            Edit
+            Засах
           </Button>
         );
       },
     },
     {
       field: "delete",
-      headerName: "Delete",
+      headerName: "Устгах",
       sortable: false,
       filterable: false,
       width: 120,
+      disableClickEventBubbling: true,
       renderCell: (params) => {
         return (
           <Button
             variant="contained"
-            color="secondary"
+            style={{
+              backgroundColor: colors.redAccent[600],
+              "&:hover": {
+                backgroundColor: colors.redAccent[700],
+              },
+            }}
             onClick={() => handleDeleteClick(params.row)}
           >
-            Delete
+            Устгах
+          </Button>
+        );
+      },
+    },
+    {
+      field: "viewDepartments",
+      headerName: "Хэлтсийг Харах",
+      sortable: false,
+      filterable: false,
+      width: 180,
+      disableClickEventBubbling: true,
+      renderCell: (params) => {
+        return (
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: colors.blueAccent[500],
+              "&:hover": {
+                backgroundColor: colors.blueAccent[700],
+              },
+            }}
+            onClick={() => handleViewDepartments(params.row.branchID)}
+          >
+            Хэлтсийг Харах
           </Button>
         );
       },
@@ -173,15 +204,14 @@ const Branch = () => {
 
   return (
     <Box m="20px">
-      <Header title="TEAM" subtitle="Managing the Team Members" />
+      <Header title="Салбарууд" subtitle="Салбар удирдах хэсэг" />
       <Button
         variant="contained"
         color="primary"
         onClick={() => setOpenAddModal(true)}
       >
-        Add Branch
+        Салбар нэмэх
       </Button>
-      {/* Add the new modal */}
       <Modal
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
@@ -203,13 +233,13 @@ const Branch = () => {
           }}
         >
           <Typography id="add-branch-modal" variant="h6" component="h2">
-            Add Branch
+            Салбар нэмэх
           </Typography>
           <TextField
             autoFocus
             margin="dense"
             id="newBranchName"
-            label="Branch Name"
+            label="Салбарын нэр"
             type="text"
             fullWidth
             value={newBranch.branchName}
@@ -218,11 +248,31 @@ const Branch = () => {
             }
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end", pt: 2 }}>
-            <Button onClick={() => setOpenAddModal(false)} color="primary">
-              Cancel
+            <Button
+              onClick={() => setOpenAddModal(false)}
+              color="primary"
+              variant="contained"
+              style={{
+                backgroundColor: colors.redAccent[600],
+                "&:hover": {
+                  backgroundColor: colors.redAccent[700],
+                },
+              }}
+            >
+              Цуцлах
             </Button>
-            <Button onClick={handleAddConfirm} color="primary">
-              Add
+            <Button
+              onClick={handleAddConfirm}
+              color="primary"
+              variant="contained"
+              style={{
+                backgroundColor: colors.greenAccent[600],
+                "&:hover": {
+                  backgroundColor: colors.greenAccent[700],
+                },
+              }}
+            >
+              Нэмэх
             </Button>
           </Box>
         </Box>
@@ -248,18 +298,38 @@ const Branch = () => {
           }}
         >
           <Typography id="delete-branch-modal" variant="h6" component="h2">
-            Delete Branch
+            Салбар устгах
           </Typography>
           <Typography>
-            Are you sure you want to delete the branch "
-            {branchToDelete?.branchName}"?
+            Та "{branchToDelete?.branchName}" салбарыг устгахдаа итгэлтэй байна
+            уу?
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "flex-end", pt: 2 }}>
-            <Button onClick={() => setOpenDeleteModal(false)} color="primary">
-              Cancel
+            <Button
+              onClick={() => setOpenDeleteModal(false)}
+              color="primary"
+              variant="contained"
+              style={{
+                backgroundColor: colors.redAccent[600],
+                "&:hover": {
+                  backgroundColor: colors.redAccent[700],
+                },
+              }}
+            >
+              Цуцлах
             </Button>
-            <Button onClick={handleDeleteConfirm} color="secondary">
-              Confirm
+            <Button
+              onClick={handleDeleteConfirm}
+              color="secondary"
+              variant="contained"
+              style={{
+                backgroundColor: colors.greenAccent[600],
+                "&:hover": {
+                  backgroundColor: colors.greenAccent[700],
+                },
+              }}
+            >
+              Батлах
             </Button>
           </Box>
         </Box>
@@ -285,13 +355,13 @@ const Branch = () => {
           }}
         >
           <Typography id="edit-branch-modal" variant="h6" component="h2">
-            Edit Branch
+            Салбар засах
           </Typography>
           <TextField
             autoFocus
             margin="dense"
             id="branchName"
-            label="Branch Name"
+            label="Салбарын нэр"
             type="text"
             fullWidth
             value={editedBranch?.branchName || ""}
@@ -303,11 +373,31 @@ const Branch = () => {
             }
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end", pt: 2 }}>
-            <Button onClick={() => setOpenModal(false)} color="primary">
-              Cancel
+            <Button
+              onClick={() => setOpenModal(false)}
+              color="primary"
+              variant="contained"
+              style={{
+                backgroundColor: colors.redAccent[600],
+                "&:hover": {
+                  backgroundColor: colors.redAccent[700],
+                },
+              }}
+            >
+              Цуцлах
             </Button>
-            <Button onClick={handleConfirm} color="primary">
-              Confirm
+            <Button
+              onClick={handleConfirm}
+              color="primary"
+              variant="contained"
+              style={{
+                backgroundColor: colors.greenAccent[600],
+                "&:hover": {
+                  backgroundColor: colors.greenAccent[700],
+                },
+              }}
+            >
+              Батлах
             </Button>
           </Box>
         </Box>
@@ -316,6 +406,12 @@ const Branch = () => {
         m="40px 0 0 0"
         height="75vh"
         sx={{
+          "& .MuiDataGrid-cell:focus": {
+            outline: "none",
+          },
+          "& .MuiDataGrid-cell:focus-within": {
+            outline: "none",
+          },
           "& .MuiDataGrid-root": {
             border: "none",
           },
@@ -336,10 +432,11 @@ const Branch = () => {
         }}
       >
         <DataGrid
+          className="no-cell-focus"
+          disableSelectionOnClick
           rows={branches}
           columns={columns}
           getRowId={(row) => row.branchID}
-          onCellClick={handleCellClick}
         />
       </Box>
     </Box>

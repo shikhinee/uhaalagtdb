@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import {
   Box,
   Typography,
@@ -38,27 +38,61 @@ const Cards = () => {
 
     fetchData();
   }, [limit, position]);
+  const handleAcceptCard = useCallback(
+    async (cardID) => {
+      try {
+        const response = await request({
+          url: `branch/acceptCard?cardID=${cardID}`,
+          method: "GET",
+        });
 
+        if (response.success) {
+          // Remove the accepted card from the table
+          setRows((rows) => rows.filter((row) => row.cardID !== cardID));
+        }
+      } catch (error) {
+        console.error("Error accepting card:", error);
+      }
+    },
+    [request]
+  );
   const columns = [
-    { field: "cardID", headerName: "Card ID", width: 120 },
-    { field: "userID", headerName: "User ID", width: 120 },
-    { field: "branchID", headerName: "Branch ID", width: 120 },
-    { field: "frstnm", headerName: "First Name", width: 150 },
-    { field: "lstnm", headerName: "Last Name", width: 150 },
-    { field: "addrs", headerName: "Address", width: 200 },
-    { field: "phnehome", headerName: "Phone Home", width: 150 },
-    { field: "phnewrk", headerName: "Phone Work", width: 150 },
-    { field: "imglnk", headerName: "Image Link", width: 200 },
-    { field: "cmpnnm", headerName: "Company Name", width: 150 },
-    { field: "pstn", headerName: "Position", width: 150 },
-    { field: "eml", headerName: "Email", width: 200 },
-    { field: "webaddrs", headerName: "Web Address", width: 200 },
-    { field: "webaddrS_1", headerName: "Web Address 1", width: 200 },
+    {
+      field: "accept",
+      headerName: "Хүсэлт",
+      width: 120,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleAcceptCard(params.row.cardID)}
+        >
+          Зөвшөөрөх
+        </Button>
+      ),
+    },
+    { field: "cardID", headerName: "Картын дугаар", width: 100 },
+    { field: "userID", headerName: "Хэрэглэгчийн дугаар", width: 150 },
+    { field: "branchID", headerName: "Салбарын дугаар", width: 120 },
+    { field: "frstnm", headerName: "Нэр", width: 150 },
+    { field: "lstnm", headerName: "Овог", width: 150 },
+    { field: "addrs", headerName: "Хаяг", width: 200 },
+    { field: "phnehome", headerName: "Гар утасны дугаар", width: 150 },
+    { field: "phnewrk", headerName: "Ажлын утасны дугаар", width: 150 },
+    { field: "imglnk", headerName: "Зургийн холбоос", width: 200 },
+    { field: "cmpnnm", headerName: "Компанийн нэр", width: 150 },
+    { field: "pstn", headerName: "Албан тушаал", width: 150 },
+    { field: "eml", headerName: "И-мэйл", width: 200 },
+    { field: "webaddrs", headerName: "Веб хаяг", width: 200 },
+    { field: "webaddrS_1", headerName: "Веб хаяг 1", width: 200 },
   ];
 
   return (
     <Box m="20px">
-      <Header title="CARD REQUESTS" subtitle="Managing the Card Requests" />
+      <Header
+        title="КАРТЫН ХҮСЭЛТҮҮД"
+        subtitle="Картын хүсэлтүүдийг зохицуулах"
+      />
       <Box
         m="40px 0 0 0"
         height="75vh"
