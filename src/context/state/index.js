@@ -6,7 +6,7 @@ import Alert from "@mui/material/Alert";
 
 const models = {};
 
-const baseURL = `http://10.150.10.88:8875/api/`;
+const baseURL = `http://10.150.10.47:8875/api/`;
 
 export const GlobalContext = createContext();
 const initialState = {
