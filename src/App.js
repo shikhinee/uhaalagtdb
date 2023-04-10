@@ -20,6 +20,8 @@ import EditCard from "pages/editCard";
 import RegisterPage from "pages/register";
 import RoleBasedElement from "components/RoleBasedElement";
 import { SnackbarProvider } from "notistack";
+import UserRequests from "pages/userRequests";
+import Users from "pages/users";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -124,6 +126,34 @@ function AppContent({ location, isSidebar }) {
                 //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
                 // >
                 <Cards />
+              ) : (
+                // {/* </RoleBasedElement> */}
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              islogin ? (
+                // <RoleBasedElement
+                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
+                // >
+                <Users />
+              ) : (
+                // {/* </RoleBasedElement> */}
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+          <Route
+            path="/userrequests"
+            element={
+              islogin ? (
+                // <RoleBasedElement
+                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
+                // >
+                <UserRequests />
               ) : (
                 // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />

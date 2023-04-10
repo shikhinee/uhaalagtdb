@@ -133,6 +133,12 @@ const Departments = () => {
           <Button
             variant="contained"
             color="primary"
+            style={{
+              backgroundColor: colors.greenAccent[600],
+              "&:hover": {
+                backgroundColor: colors.greenAccent[700],
+              },
+            }}
             onClick={() => handleEditClick(params.row)}
           >
             Засах
@@ -150,7 +156,12 @@ const Departments = () => {
         return (
           <Button
             variant="contained"
-            color="secondary"
+            style={{
+              backgroundColor: colors.redAccent[600],
+              "&:hover": {
+                backgroundColor: colors.redAccent[700],
+              },
+            }}
             onClick={() => handleDeleteClick(params.row)}
           >
             Устгах
@@ -162,17 +173,19 @@ const Departments = () => {
 
   return (
     <Box m="20px">
-      <Header
-        title="АНГИЛЛУУД"
-        subtitle={`Тасгийн ${branchID} дугаартай салбарын ангиллуудыг зохион байгуулах`}
-      />
+      <Header title="Тасгууд" subtitle={`${branchID} салбарын тасгууд `} />
       <Button
         variant="contained"
-        color="primary"
+        style={{
+          backgroundColor: colors.greenAccent[600],
+          "&:hover": {
+            backgroundColor: colors.greenAccent[700],
+          },
+        }}
         onClick={() => setOpenAddModal(true)}
         sx={{ mt: 2 }}
       >
-        Ангилал нэмэх
+        Тасаг нэмэх
       </Button>
       {/* Add Department Modal */}
       <Modal
@@ -196,7 +209,7 @@ const Departments = () => {
           }}
         >
           <Typography id="add-department-modal" variant="h6" component="h2">
-            Ангилал нэмэх
+            Тасаг нэмэх
           </Typography>
           <TextField
             autoFocus
@@ -210,10 +223,29 @@ const Departments = () => {
             onChange={(e) => setNewDepartment(e.target.value)}
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end", pt: 2 }}>
-            <Button onClick={() => setOpenAddModal(false)} color="primary">
+            <Button
+              style={{
+                color: colors.grey[100],
+                backgroundColor: colors.redAccent[600],
+                "&:hover": {
+                  backgroundColor: colors.redAccent[700],
+                },
+              }}
+              onClick={() => setOpenAddModal(false)}
+              color="primary"
+            >
               Цуцлах
             </Button>
-            <Button onClick={handleAddDepartment} color="primary">
+            <Button
+              style={{
+                backgroundColor: colors.greenAccent[600],
+                "&:hover": {
+                  backgroundColor: colors.greenAccent[700],
+                },
+              }}
+              onClick={handleAddDepartment}
+              color="primary"
+            >
               Нэмэх
             </Button>
           </Box>
@@ -241,7 +273,7 @@ const Departments = () => {
           }}
         >
           <Typography id="edit-department-modal" variant="h6" component="h2">
-            Ангилал засах
+            Тасаг засах
           </Typography>
           <TextField
             autoFocus
@@ -260,10 +292,29 @@ const Departments = () => {
             }
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end", pt: 2 }}>
-            <Button onClick={() => setOpenEditModal(false)} color="primary">
+            <Button
+              style={{
+                color: colors.grey[100],
+                backgroundColor: colors.redAccent[600],
+                "&:hover": {
+                  backgroundColor: colors.redAccent[700],
+                },
+              }}
+              onClick={() => setOpenEditModal(false)}
+              color="primary"
+            >
               Цуцлах
             </Button>
-            <Button onClick={handleEditConfirm} color="primary">
+            <Button
+              style={{
+                backgroundColor: colors.greenAccent[600],
+                "&:hover": {
+                  backgroundColor: colors.greenAccent[700],
+                },
+              }}
+              onClick={handleEditConfirm}
+              color="primary"
+            >
               Засах
             </Button>
           </Box>
@@ -291,16 +342,35 @@ const Departments = () => {
           }}
         >
           <Typography id="delete-department-modal" variant="h6" component="h2">
-            Ангилал устгах
+            Тасаг устгах
           </Typography>
           <Typography variant="body1" gutterBottom>
             Та энэ ангиллыг устгахдаа итгэлтэй байна уу?
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "flex-end", pt: 2 }}>
-            <Button onClick={() => setOpenDeleteModal(false)} color="primary">
+            <Button
+              style={{
+                color: colors.grey[100],
+                backgroundColor: colors.redAccent[600],
+                "&:hover": {
+                  backgroundColor: colors.redAccent[700],
+                },
+              }}
+              onClick={() => setOpenDeleteModal(false)}
+              color="primary"
+            >
               Цуцлах
             </Button>
-            <Button onClick={handleDeleteConfirm} color="secondary">
+            <Button
+              style={{
+                backgroundColor: colors.greenAccent[600],
+                "&:hover": {
+                  backgroundColor: colors.greenAccent[700],
+                },
+              }}
+              onClick={handleDeleteConfirm}
+              color="secondary"
+            >
               Устгах
             </Button>
           </Box>

@@ -12,7 +12,7 @@ import { tokens } from "../../theme";
 import { GlobalContext } from "context/state";
 import Header from "components/Header";
 
-const Cards = () => {
+const UserRequests = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { request } = useContext(GlobalContext);
@@ -25,9 +25,8 @@ const Cards = () => {
     const fetchData = async () => {
       setLoading(true);
       const response = await request({
-        url: `branch/getCardRequests?limit=${limit}&position=${position}`,
+        url: `user/getUserRequests?limit=${limit}&position=${position}`,
         method: "GET",
-        model: "getCardRequests",
       });
 
       if (response.success) {
@@ -38,43 +37,45 @@ const Cards = () => {
 
     fetchData();
   }, [limit, position]);
-  const handleAcceptCard = useCallback(
-    async (cardID) => {
+
+  const handleAcceptUser = useCallback(
+    async (userID) => {
       try {
         const response = await request({
-          url: `branch/acceptCard?cardID=${cardID}`,
+          url: `user/acceptUser?userID=${userID}`,
           method: "GET",
         });
 
         if (response.success) {
-          // Remove the accepted card from the table
-          setRows((rows) => rows.filter((row) => row.cardID !== cardID));
+          setRows((rows) => rows.filter((row) => row.userID !== userID));
         }
       } catch (error) {
-        console.error("Error accepting card:", error);
+        console.error("Error accepting user:", error);
       }
     },
     [request]
   );
-  const handleDeclineCard = useCallback(
-    async (cardID) => {
+
+  const handleDeclineUser = useCallback(
+    async (userID) => {
       try {
         const response = await request({
-          url: `branch/declineCard?cardID=${cardID}`,
+          url: `user/declineUser?userID=${userID}`,
           method: "GET",
         });
 
         if (response.success) {
-          // Remove the declined card from the table
-          setRows((rows) => rows.filter((row) => row.cardID !== cardID));
+          setRows((rows) => rows.filter((row) => row.userID !== userID));
         }
       } catch (error) {
-        console.error("Error declining card:", error);
+        console.error("Error declining user:", error);
       }
     },
     [request]
   );
+
   const columns = [
+    // Add your desired columns here
     {
       field: "accept",
       headerName: "Хүсэлт",
@@ -89,7 +90,7 @@ const Cards = () => {
               backgroundColor: colors.greenAccent[700],
             },
           }}
-          onClick={() => handleAcceptCard(params.row.cardID)}
+          onClick={() => handleAcceptUser(params.row.userID)}
         >
           Зөвшөөрөх
         </Button>
@@ -109,33 +110,19 @@ const Cards = () => {
               backgroundColor: colors.redAccent[700],
             },
           }}
-          onClick={() => handleDeclineCard(params.row.cardID)}
+          onClick={() => handleDeclineUser(params.row.userID)}
         >
           Цуцлах
         </Button>
       ),
     },
-    { field: "cardID", headerName: "Картын дугаар", width: 100 },
-    { field: "userID", headerName: "Хэрэглэгчийн дугаар", width: 150 },
-    { field: "branchID", headerName: "Салбарын дугаар", width: 120 },
-    { field: "frstnm", headerName: "Нэр", width: 150 },
-    { field: "lstnm", headerName: "Овог", width: 150 },
-    { field: "addrs", headerName: "Хаяг", width: 200 },
-    { field: "phnehome", headerName: "Гар утасны дугаар", width: 150 },
-    { field: "phnewrk", headerName: "Ажлын утасны дугаар", width: 150 },
-    { field: "imglnk", headerName: "Зургийн холбоос", width: 200 },
-    { field: "cmpnnm", headerName: "Компанийн нэр", width: 150 },
-    { field: "pstn", headerName: "Албан тушаал", width: 150 },
-    { field: "eml", headerName: "И-мэйл", width: 200 },
-    { field: "webaddrs", headerName: "Веб хаяг", width: 200 },
-    { field: "webaddrS_1", headerName: "Веб хаяг 1", width: 200 },
   ];
 
   return (
     <Box m="20px">
       <Header
-        title="КАРТЫН ХҮСЭЛТҮҮД"
-        subtitle="Картын хүсэлтүүдийг зохицуулах"
+        title="ХЭРЭГЛЭГЧИЙН ХҮСЭЛТҮҮД"
+        subtitle="Хэрэглэгчийн хүсэлтүүдийг зохицуулах"
       />
       <Box
         m="40px 0 0 0"
@@ -163,7 +150,7 @@ const Cards = () => {
         <DataGrid
           rows={rows}
           columns={columns}
-          getRowId={(row) => row.cardID}
+          getRowId={(row) => row.userID}
           pageSize={limit}
           onPageChange={(params) => {
             setPosition(params.page * limit);
@@ -176,4 +163,4 @@ const Cards = () => {
   );
 };
 
-export default Cards;
+export default UserRequests;
