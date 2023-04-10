@@ -167,14 +167,14 @@ const Sidebar = () => {
             </Typography>
             <Item
               title="Картнууд"
-              to="/cardRequests"
+              to="/cards"
               icon={<CalendarTodayOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Картны хүсэлтүүд"
-              to="/cards"
+              to="/cardRequests"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

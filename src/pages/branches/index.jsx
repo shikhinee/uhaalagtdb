@@ -21,6 +21,7 @@ const Branch = () => {
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
   const { request } = useContext(GlobalContext);
+  console.log(useContext(GlobalContext));
   const [branches, setBranches] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [editedBranch, setEditedBranch] = useState(null);
@@ -253,6 +254,7 @@ const Branch = () => {
               color="primary"
               variant="contained"
               style={{
+                marginRight: 10,
                 backgroundColor: colors.redAccent[600],
                 "&:hover": {
                   backgroundColor: colors.redAccent[700],
@@ -310,6 +312,7 @@ const Branch = () => {
               color="primary"
               variant="contained"
               style={{
+                marginRight: 10,
                 backgroundColor: colors.redAccent[600],
                 "&:hover": {
                   backgroundColor: colors.redAccent[700],
@@ -378,6 +381,7 @@ const Branch = () => {
               color="primary"
               variant="contained"
               style={{
+                marginRight: 10,
                 backgroundColor: colors.redAccent[600],
                 "&:hover": {
                   backgroundColor: colors.redAccent[700],

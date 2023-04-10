@@ -12,7 +12,7 @@ import { tokens } from "../../theme";
 import { GlobalContext } from "context/state";
 import Header from "components/Header";
 
-const UserRequests = () => {
+const CardRequests = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { request } = useContext(GlobalContext);
@@ -25,8 +25,9 @@ const UserRequests = () => {
     const fetchData = async () => {
       setLoading(true);
       const response = await request({
-        url: `user/getUserRequests?limit=${limit}&position=${position}`,
+        url: `branch/getCardRequests?limit=${limit}&position=${position}`,
         method: "GET",
+        model: "getCardRequests",
       });
 
       if (response.success) {
@@ -37,77 +38,46 @@ const UserRequests = () => {
 
     fetchData();
   }, [limit, position]);
-
-  const handleAcceptUser = useCallback(
-    async (userID) => {
+  const handleAcceptCard = useCallback(
+    async (cardID) => {
       try {
         const response = await request({
-          url: `user/acceptUser?userID=${userID}`,
+          url: `branch/acceptCard?cardID=${cardID}`,
           method: "GET",
         });
 
         if (response.success) {
-          setRows((rows) => rows.filter((row) => row.userID !== userID));
+          // Remove the accepted card from the table
+          setRows((rows) => rows.filter((row) => row.cardID !== cardID));
         }
       } catch (error) {
-        console.error("Error accepting user:", error);
+        console.error("Error accepting card:", error);
       }
     },
     [request]
   );
-
-  const handleDeclineUser = useCallback(
-    async (userID) => {
+  const handleDeclineCard = useCallback(
+    async (cardID) => {
       try {
         const response = await request({
-          url: `user/declineUser?userID=${userID}`,
+          url: `branch/declineCard?cardID=${cardID}`,
           method: "GET",
         });
 
         if (response.success) {
-          setRows((rows) => rows.filter((row) => row.userID !== userID));
+          // Remove the declined card from the table
+          setRows((rows) => rows.filter((row) => row.cardID !== cardID));
         }
       } catch (error) {
-        console.error("Error declining user:", error);
+        console.error("Error declining card:", error);
       }
     },
     [request]
   );
-
   const columns = [
     {
-      field: "userID",
-      headerName: "User ID",
-      width: 120,
-    },
-    {
-      field: "username",
-      headerName: "Username",
-      width: 150,
-    },
-    {
-      field: "role",
-      headerName: "Role",
-      width: 120,
-    },
-    {
-      field: "branchID",
-      headerName: "Branch ID",
-      width: 150,
-    },
-    {
-      field: "userStatus",
-      headerName: "User Status",
-      width: 150,
-    },
-    {
-      field: "depID",
-      headerName: "Department ID",
-      width: 150,
-    },
-    {
       field: "accept",
-      headerName: "Accept",
+      headerName: "Хүсэлт",
       width: 120,
       renderCell: (params) => (
         <Button
@@ -119,7 +89,7 @@ const UserRequests = () => {
               backgroundColor: colors.greenAccent[700],
             },
           }}
-          onClick={() => handleAcceptUser(params.row.userID)}
+          onClick={() => handleAcceptCard(params.row.cardID)}
         >
           Зөвшөөрөх
         </Button>
@@ -127,7 +97,7 @@ const UserRequests = () => {
     },
     {
       field: "decline",
-      headerName: "Decline",
+      headerName: "Цуцлах",
       width: 120,
       renderCell: (params) => (
         <Button
@@ -139,19 +109,33 @@ const UserRequests = () => {
               backgroundColor: colors.redAccent[700],
             },
           }}
-          onClick={() => handleDeclineUser(params.row.userID)}
+          onClick={() => handleDeclineCard(params.row.cardID)}
         >
           Цуцлах
         </Button>
       ),
     },
+    { field: "cardID", headerName: "Картын дугаар", width: 100 },
+    { field: "userID", headerName: "Хэрэглэгчийн дугаар", width: 150 },
+    { field: "branchID", headerName: "Салбарын дугаар", width: 120 },
+    { field: "frstnm", headerName: "Нэр", width: 150 },
+    { field: "lstnm", headerName: "Овог", width: 150 },
+    { field: "addrs", headerName: "Хаяг", width: 200 },
+    { field: "phnehome", headerName: "Гар утасны дугаар", width: 150 },
+    { field: "phnewrk", headerName: "Ажлын утасны дугаар", width: 150 },
+    { field: "imglnk", headerName: "Зургийн холбоос", width: 200 },
+    { field: "cmpnnm", headerName: "Компанийн нэр", width: 150 },
+    { field: "pstn", headerName: "Албан тушаал", width: 150 },
+    { field: "eml", headerName: "И-мэйл", width: 200 },
+    { field: "webaddrs", headerName: "Веб хаяг", width: 200 },
+    { field: "webaddrS_1", headerName: "Веб хаяг 1", width: 200 },
   ];
 
   return (
     <Box m="20px">
       <Header
-        title="Шинэ ажилтны хүсэлт"
-        subtitle="Шинэ ажилтны хүсэлтүүдийг зохицуулах"
+        title="Картны Хүсэлтүүд"
+        subtitle="Картны хүсэлтүүдийг зохицуулах"
       />
       <Box
         m="40px 0 0 0"
@@ -179,7 +163,7 @@ const UserRequests = () => {
         <DataGrid
           rows={rows}
           columns={columns}
-          getRowId={(row) => row.userID}
+          getRowId={(row) => row.cardID}
           pageSize={limit}
           onPageChange={(params) => {
             setPosition(params.page * limit);
@@ -192,4 +176,4 @@ const UserRequests = () => {
   );
 };
 
-export default UserRequests;
+export default CardRequests;

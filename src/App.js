@@ -8,13 +8,12 @@ import Sidebar from "./pages/global/Sidebar";
 import Dashboard from "./pages/dashboard";
 import { useState, useContext } from "react";
 import { GlobalContext } from "context/state";
-import Team from "./pages/team";
 import Invoices from "./pages/invoices";
 import Contacts from "./pages/contacts";
 import LoginPage from "pages/login";
 import Branch from "pages/branches";
 import Departments from "pages/departments";
-import Cards from "pages/cards";
+import CardRequests from "pages/cardRequests";
 import AddCard from "pages/addCard";
 import EditCard from "pages/editCard";
 import RegisterPage from "pages/register";
@@ -22,6 +21,8 @@ import RoleBasedElement from "components/RoleBasedElement";
 import { SnackbarProvider } from "notistack";
 import UserRequests from "pages/userRequests";
 import Users from "pages/users";
+import Cards from "pages/cards";
+import Card from "pages/card";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -46,7 +47,9 @@ function AppContent({ location, isSidebar }) {
   const { islogin, login, logout, role } = useContext(GlobalContext);
   console.log(role);
   const showLayout =
-    location.pathname !== "/login" && location.pathname !== "/register";
+    location.pathname !== "/login" &&
+    location.pathname !== "/register" &&
+    !location.pathname.startsWith("/card/");
 
   return (
     <>
@@ -70,20 +73,6 @@ function AppContent({ location, isSidebar }) {
                 //   ]}
                 // >
                 <Dashboard />
-              ) : (
-                // {/* </RoleBasedElement> */}
-                <Navigate to="/login" replace />
-              )
-            }
-          />
-          <Route
-            path="/team"
-            element={
-              islogin ? (
-                // <RoleBasedElement
-                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
-                // >
-                <Team />
               ) : (
                 // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
@@ -126,6 +115,20 @@ function AppContent({ location, isSidebar }) {
                 //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
                 // >
                 <Cards />
+              ) : (
+                // {/* </RoleBasedElement> */}
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+          <Route
+            path="/cardRequests"
+            element={
+              islogin ? (
+                // <RoleBasedElement
+                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
+                // >
+                <CardRequests />
               ) : (
                 // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
@@ -200,18 +203,7 @@ function AppContent({ location, isSidebar }) {
               )
             }
           />
-          <Route
-            path="/invoices"
-            element={
-              islogin ? (
-                // <RoleBasedElement allowedRoles={["admin"]}>
-                <Invoices />
-              ) : (
-                // {/* </RoleBasedElement> */}
-                <Navigate to="/login" replace />
-              )
-            }
-          />
+          <Route path="/card/:cardID" element={<Card />} />
           <Route
             path="/login"
             element={!islogin ? <LoginPage /> : <Navigate to="/" replace />}
