@@ -23,6 +23,7 @@ import UserRequests from "pages/userRequests";
 import Users from "pages/users";
 import Cards from "pages/cards";
 import Card from "pages/card";
+import ChangePassword from "pages/changePassword";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -185,6 +186,20 @@ function AppContent({ location, isSidebar }) {
                 //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
                 // >
                 <EditCard />
+              ) : (
+                // {/* </RoleBasedElement> */}
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+          <Route
+            path="/changePassword"
+            element={
+              islogin ? (
+                // <RoleBasedElement
+                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
+                // >
+                <ChangePassword />
               ) : (
                 // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />

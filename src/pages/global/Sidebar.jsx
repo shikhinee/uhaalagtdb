@@ -5,6 +5,7 @@ import "react-pro-sidebar/dist/css/styles.css";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { tokens } from "../../theme";
+import jwt_decode from "jwt-decode";
 import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
@@ -18,6 +19,8 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 
 const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
   const theme = useTheme();
@@ -54,10 +57,20 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   const [cardID, setCardID] = useState(null);
+  const [hasCard, setHasCard] = useState(false);
   const navigate = useNavigate();
-  const { decodedToken, request } = useContext(GlobalContext);
+  const { setDecodedToken, decodedToken, request } = useContext(GlobalContext);
   console.log(useContext(GlobalContext));
   const branchID = decodedToken ? decodedToken.branchID : null;
+  const decodeToken = (token) => {
+    try {
+      const decodedToken = jwt_decode(token);
+      return decodedToken;
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      return null;
+    }
+  };
   const handleMyCardClick = async () => {
     console.log("handlecardclick called");
     if (decodedToken) {
@@ -81,6 +94,31 @@ const Sidebar = () => {
       }
     }
   };
+  useEffect(() => {
+    const fetchCardID = async () => {
+      const response = await request({
+        url: `branch/getCardByUserId`,
+        method: "GET",
+      });
+
+      if (response.success) {
+        if (response.value && response.value.length > 0) {
+          setHasCard(true);
+        } else {
+          setHasCard(false);
+        }
+      }
+    };
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = decodeToken(token);
+      if (decoded) {
+        setDecodedToken(decoded);
+        fetchCardID();
+      }
+    }
+  }, []);
   useEffect(() => {
     if (cardID) {
       navigate(`/card/${cardID}`);
@@ -135,14 +173,14 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  {decodedToken.username}
+                  {decodedToken && decodedToken.username}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  {decodedToken.userStatus === "admin"
+                  {decodedToken && decodedToken.userStatus === "admin"
                     ? "Админ"
-                    : decodedToken.userStatus === "branchAdmin"
+                    : decodedToken && decodedToken.userStatus === "branchAdmin"
                     ? "Салбарын Админ"
-                    : decodedToken.userStatus === "Accepted"
+                    : decodedToken && decodedToken.userStatus === "Accepted"
                     ? "Ажилтан"
                     : ""}
                 </Typography>
@@ -164,6 +202,22 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
               onClick={handleMyCardClick}
+            />
+            {hasCard && (
+              <Item
+                title="Карт засах"
+                to="/edit"
+                icon={<SettingsOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
+            <Item
+              title="Нууц үг солих"
+              icon={<LockOpenIcon />}
+              to="/changePassword"
+              selected={selected}
+              setSelected={setSelected}
             />
             <Typography
               variant="h6"

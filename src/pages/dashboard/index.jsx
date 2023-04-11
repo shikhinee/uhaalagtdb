@@ -10,19 +10,10 @@ const Dashboard = () => {
   return (
     <Box m="20px">
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
-        <Typography variant="h5">
-          Welcome back, {context.username} ({context.role})
-        </Typography>
-      </Box>
-      <Box mt="20px">
-        <Typography variant="body1">Your User ID is:: {context.contextID}</Typography>
-        <Typography variant="body1">
-          Your Branch ID is: {context.branchID}
-        </Typography>
-        <Typography variant="body1">
-          Your Department ID is: {context.depID}
-        </Typography>
+        <Header
+          title="Нүүр хуудас"
+          subtitle="TDB бизнес картны платформд тавтай морил"
+        />
       </Box>
     </Box>
   );

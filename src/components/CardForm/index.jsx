@@ -4,10 +4,9 @@ import {
   TextField,
   Button,
   Typography,
-  FormControlLabel,
-  Switch,
   Paper,
   Container,
+  Grid,
 } from "@mui/material";
 import { GlobalContext } from "context/state";
 
@@ -18,8 +17,6 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
       ? defaultData
       : {
           cardID: "",
-          userID: 0,
-          branchID: 0,
           crdst: true,
           frstnm: "",
           lstnm: "",
@@ -34,6 +31,7 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
           webaddrS_1: "",
         }
   );
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     if (editMode && defaultData) {
@@ -55,6 +53,9 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
         body: formData,
       });
       if (response.success) {
+        if (file) {
+          await handleImageUpload(formData.cardID);
+        }
         onSubmitSuccess();
       }
     } catch (error) {
@@ -62,119 +63,152 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
     }
   };
 
-  const handleImageUpload = async (cardID, e) => {
-    const file = e.target.files[0];
-    if (file) {
-      try {
-        const formData = new FormData();
-        formData.append("cardID", cardID);
-        formData.append("image", file);
-        const response = await request({
-          url: "branch/addCardImage",
-          method: "POST",
-          body: formData,
-          isfile: true,
-        });
+  const handleImageUpload = async (cardID) => {
+    try {
+      const formData = new FormData();
+      formData.append("cardID", cardID);
+      formData.append("image", file);
+      console.log("cardID", cardID);
+      const response = await request({
+        url: "branch/addCardImage",
+        method: "POST",
+        body: formData,
+        isfile: true,
+      });
 
-        if (response.success) {
-          setFormData({ ...formData, imglnk: response.imglnk });
-        }
-      } catch (error) {
-        console.error("Error uploading card image:", error);
+      if (response.success) {
+        setFormData({ ...formData, imglnk: response.imglnk });
       }
+    } catch (error) {
+      console.error("Error uploading card image:", error);
     }
   };
-  const handleSwitchChange = (e) => {
-    setFormData({ ...formData, crdst: e.target.checked });
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
   return (
     <Container maxWidth="sm">
       <Paper elevation={3} sx={{ padding: 3, marginTop: 3 }}>
         <Typography variant="h5" align="center" gutterBottom>
-          Add Business Card
+          {editMode ? "Картны мэдээлэл засах" : "Картны бүртгэл"}
         </Typography>
         <form onSubmit={handleSubmit}>
-          <Box display="flex" flexDirection="column" gap={2}>
-            <TextField
-              label="First Name"
-              name="frstnm"
-              value={formData.frstnm}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Last Name"
-              name="lstnm"
-              value={formData.lstnm}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Address"
-              name="addrs"
-              value={formData.addrs}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Phone Home"
-              name="phnehome"
-              value={formData.phnehome}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Phone Work"
-              name="phnewrk"
-              value={formData.phnewrk}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Image Link"
-              name="imglnk"
-              value={formData.imglnk}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Company Name"
-              name="cmpnnm"
-              value={formData.cmpnnm}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Position"
-              name="pstn"
-              value={formData.pstn}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Email"
-              name="eml"
-              value={formData.eml}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Web Address"
-              name="webaddrs"
-              value={formData.webaddrs}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Web Address 1"
-              name="webaddrS_1"
-              value={formData.webaddrS_1}
-              onChange={handleChange}
-            />
-            <input
-              type="file"
-              onChange={(e) => handleImageUpload(formData.cardID, e)}
-              accept="image/*"
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{ alignSelf: "center", marginTop: 2 }}
-            >
-              Submit
-            </Button>
-          </Box>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Нэр"
+                name="frstnm"
+                value={formData.frstnm}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Овог"
+                name="lstnm"
+                value={formData.lstnm}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Хаяг"
+                name="addrs"
+                value={formData.addrs}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Гэрийн утас"
+                name="phnehome"
+                value={formData.phnehome}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Ажлын утас"
+                name="phnewrk"
+                value={formData.phnewrk}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Компанийн нэр"
+                name="cmpnnm"
+                value={formData.cmpnnm}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Албан тушаал"
+                name="pstn"
+                value={formData.pstn}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Ажилтны код"
+                name="cardID"
+                value={formData.cardID}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Имэйл"
+                name="eml"
+                value={formData.eml}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="https://www.facebook.com/id"
+                name="webaddrs"
+                value={formData.webaddrs}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="https://www.instagram.com/id"
+                name="webaddrS_1"
+                value={formData.webaddrS_1}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <input type="file" onChange={handleFileChange} accept="image/*" />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{ alignSelf: "center", marginTop: 2 }}
+                fullWidth
+              >
+                {editMode ? "Засах" : "Нэмэх"}
+              </Button>
+            </Grid>
+          </Grid>
         </form>
       </Paper>
     </Container>

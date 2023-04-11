@@ -3,17 +3,12 @@ import appReducer from "../reducer";
 import { Snackbar } from "@mui/material";
 import { fetchRequest } from "../fetch";
 import Alert from "@mui/material/Alert";
-import jwtDecode from "jwt-decode";
 
 const models = {};
 
 const baseURL = `http://10.150.10.47:8875/api/`;
 
 export const GlobalContext = createContext();
-const getDecodedToken = () => {
-  const token = localStorage.getItem("token");
-  return token ? jwtDecode(token) : null;
-};
 const initialState = {
   islogin: Boolean(JSON.parse(localStorage.getItem("token"))),
   alert: {
@@ -21,20 +16,18 @@ const initialState = {
     message: "",
     severity: "success",
   },
-  decodedToken: getDecodedToken(),
 };
 
 export const GlobalProvider = (props) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
   const [islogin, setlogin] = useState(initialState.islogin);
+  const [decodedToken, setDecodedToken] = useState(null);
   const [alert, setAlert] = useState({
     open: false,
     message: "",
     severity: "success",
   });
-  const updateDecodedToken = () => {
-    dispatch({ type: "UPDATE_DECODED_TOKEN", payload: getDecodedToken() });
-  };
+
   const handleCloseAlert = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -44,7 +37,6 @@ export const GlobalProvider = (props) => {
   };
   const login = () => {
     setlogin(true);
-    updateDecodedToken();
   };
   const showAlert = (message, severity) => {
     dispatch({ type: "SET_ALERT", payload: { message, severity } });
@@ -54,7 +46,6 @@ export const GlobalProvider = (props) => {
   };
   const logout = () => {
     setlogin(false);
-    updateDecodedToken();
   };
   const addmodel = ({ model }) => {
     models[model] = {
@@ -152,7 +143,8 @@ export const GlobalProvider = (props) => {
           logout,
           islogin,
           showAlert,
-          updateDecodedToken,
+          decodedToken,
+          setDecodedToken,
         }}
       >
         {props.children}
