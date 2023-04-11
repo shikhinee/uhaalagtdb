@@ -380,15 +380,45 @@ const Departments = () => {
           </Box>
         </Box>
       </Modal>
-      <DataGrid
-        rows={departments}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        getRowId={(row) => row.depID}
-        style={{ height: 400, width: "100%" }}
-        sx={{ mt: 2 }}
-      />
+      <Box
+        m="40px 0 0 0"
+        height="75vh"
+        sx={{
+          "& .MuiDataGrid-cell:focus": {
+            outline: "none",
+          },
+          "& .MuiDataGrid-cell:focus-within": {
+            outline: "none",
+          },
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScoller": {
+            backgroundColor: colors.primary[400],
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+            backgroundColor: colors.blueAccent[700],
+          },
+        }}
+      >
+        <DataGrid
+          rows={departments}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          getRowId={(row) => row.depID}
+          style={{ height: 400, width: "100%" }}
+          sx={{ mt: 2 }}
+        />
+      </Box>
     </Box>
   );
 };

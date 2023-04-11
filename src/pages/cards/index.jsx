@@ -58,7 +58,7 @@ const Cards = () => {
     fetchData();
   }, [limit, position]);
   const handleViewCard = (cardID) => {
-    navigate(`/${cardID}`);
+    navigate(`/card/${cardID}`);
   };
 
   const handleEditCard = (cardID) => {

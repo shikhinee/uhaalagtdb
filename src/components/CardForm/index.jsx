@@ -96,33 +96,6 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" gap={2}>
             <TextField
-              label="Card ID"
-              name="cardID"
-              value={formData.cardID}
-              onChange={handleChange}
-            />
-            <TextField
-              label="User ID"
-              name="userID"
-              value={formData.userID}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Branch ID"
-              name="branchID"
-              value={formData.branchID}
-              onChange={handleChange}
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={formData.crdst}
-                  onChange={handleSwitchChange}
-                />
-              }
-              label="CRDST"
-            />
-            <TextField
               label="First Name"
               name="frstnm"
               value={formData.frstnm}

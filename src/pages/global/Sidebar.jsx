@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { GlobalContext } from "context/state";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { tokens } from "../../theme";
+import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
@@ -17,20 +19,31 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 
-const Item = ({ title, to, icon, selected, setSelected }) => {
+const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const navigate = useNavigate();
   return (
     <MenuItem
       active={selected === title}
       style={{
         color: colors.grey[100],
       }}
-      onClick={() => setSelected(title)}
+      onClick={() => {
+        console.log(`Clicked: ${title}`); // Add this line to log the click event
+
+        setSelected(title);
+        onClick ? onClick() : to && navigate(to);
+      }}
       icon={icon}
     >
-      <Typography>{title}</Typography>
-      <Link to={to} />
+      {onClick ? (
+        <Typography>{title}</Typography>
+      ) : (
+        <Link to={to}>
+          <Typography>{title}</Typography>
+        </Link>
+      )}
     </MenuItem>
   );
 };
@@ -40,6 +53,39 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+  const [cardID, setCardID] = useState(null);
+  const navigate = useNavigate();
+  const { decodedToken, request } = useContext(GlobalContext);
+  console.log(useContext(GlobalContext));
+  const branchID = decodedToken ? decodedToken.branchID : null;
+  const handleMyCardClick = async () => {
+    console.log("handlecardclick called");
+    if (decodedToken) {
+      console.log(decodedToken.userID);
+      const userId = decodedToken.userID;
+
+      const response = await request({
+        url: `branch/getCardByUserId`,
+        method: "GET",
+      });
+      console.log("API response:", response); // Add this line to log the response
+
+      if (response.success) {
+        if (response.value && response.value.length > 0) {
+          console.log("Setting cardID to:", response.value[0].cardID); // Add this line to log the new cardID value
+          console.log(cardID);
+          setCardID(response.value[0].cardID);
+        } else {
+          navigate("/add");
+        }
+      }
+    }
+  };
+  useEffect(() => {
+    if (cardID) {
+      navigate(`/card/${cardID}`);
+    }
+  }, [cardID, navigate]);
   return (
     <Box
       sx={{
@@ -82,15 +128,6 @@ const Sidebar = () => {
 
           {!isCollapsed && (
             <Box mb="25px">
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <img
-                  alt="profile-user"
-                  width="100px"
-                  height="100px"
-                  src={`../../assets/user.png`}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
-                />
-              </Box>
               <Box textAlign="center">
                 <Typography
                   variant="h2"
@@ -98,10 +135,16 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Ed Roh
+                  {decodedToken.username}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  VP Fancy Admin
+                  {decodedToken.userStatus === "admin"
+                    ? "Админ"
+                    : decodedToken.userStatus === "branchAdmin"
+                    ? "Салбарын Админ"
+                    : decodedToken.userStatus === "Accepted"
+                    ? "Ажилтан"
+                    : ""}
                 </Typography>
               </Box>
             </Box>
@@ -115,7 +158,13 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-
+            <Item
+              title="Миний Карт"
+              icon={<CreditCardOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              onClick={handleMyCardClick}
+            />
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -130,13 +179,15 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title="Хэлтэс"
-              to="/departments/123"
-              icon={<MapOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+            {branchID && (
+              <Item
+                title="Хэлтэс"
+                to={`/departments/${branchID}`}
+                icon={<MapOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
             <Typography
               variant="h6"
               color={colors.grey[300]}
