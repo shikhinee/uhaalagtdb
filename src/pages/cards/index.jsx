@@ -62,7 +62,7 @@ const Cards = () => {
   };
 
   const handleEditCard = (cardID) => {
-    navigate(`/edit/${cardID}`);
+    navigate(`/editcardAdmin/${cardID}`);
   };
   const handleToggleCard = useCallback(
     async (cardID, isActive) => {

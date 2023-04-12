@@ -16,6 +16,7 @@ import Departments from "pages/departments";
 import CardRequests from "pages/cardRequests";
 import AddCard from "pages/addCard";
 import EditCard from "pages/editCard";
+import EditCardAdmin from "pages/editCardAdmin";
 import RegisterPage from "pages/register";
 import RoleBasedElement from "components/RoleBasedElement";
 import { SnackbarProvider } from "notistack";
@@ -186,6 +187,20 @@ function AppContent({ location, isSidebar }) {
                 //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
                 // >
                 <EditCard />
+              ) : (
+                // {/* </RoleBasedElement> */}
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+          <Route
+            path="/editcardAdmin/:cardID"
+            element={
+              islogin ? (
+                // <RoleBasedElement
+                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
+                // >
+                <EditCardAdmin />
               ) : (
                 // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
