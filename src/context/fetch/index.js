@@ -2,18 +2,19 @@ import React from "react";
 const tokenmsg =
   "Уучлаарай таны нэвтрэлтийн хугацаа дууссан байна. Та дахин нэвтрэнэ үү.";
 
-export function request({ url, method, body, isfiles, token }) {
+export function request({ url, method, body, isfile, token }) {
+  console.log('body: ', body);
   let Authorization = "Bearer " + token;
 
-  if (isfiles) {
+  if (isfile) {
     return fetch(url, {
       method: "POST",
       headers: new Headers({
         Accept: "application/json",
-        // Removed Content-Type header
+        // "Content-Type": 'multipart/form-data',
         Authorization: Authorization.replace(/"/g, ""),
       }),
-      body,
+      body: body,
     })
       .then((res) => ({ ...res, success: res.ok || res.success }))
       .catch((err) => {

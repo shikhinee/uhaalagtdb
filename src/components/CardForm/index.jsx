@@ -64,15 +64,14 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
   };
 
   const handleImageUpload = async (cardID) => {
+    console.log('cardID: ', cardID);
     try {
-      const formData = new FormData();
-      formData.append("cardID", cardID);
-      formData.append("image", file);
-      console.log("cardID", cardID);
       const response = await request({
         url: "branch/addCardImage",
         method: "POST",
-        body: formData,
+        body: {
+          cardID: cardID, img: file
+        },
         isfile: true,
       });
 
