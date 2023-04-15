@@ -2,20 +2,20 @@ import React from "react";
 const tokenmsg =
   "Уучлаарай таны нэвтрэлтийн хугацаа дууссан байна. Та дахин нэвтрэнэ үү.";
 
-export function request({ url, method, body, isfiles, token }) {
+export function request({ url, method, body, isfile, token }) {
+  console.log("body: ", body);
   let Authorization = "Bearer " + token;
   console.log("Request:", { url, method, body, isfiles, token });
 
-  if (isfiles) {
-    console.log("true");
+  if (isfile) {
     return fetch(url, {
       method: "POST",
       headers: new Headers({
         Accept: "application/json",
-        "Content-Type": "multipart/form-data",
+        // "Content-Type": 'multipart/form-data',
         Authorization: Authorization.replace(/"/g, ""),
       }),
-      body,
+      body: body,
     })
       .then((res) => ({ ...res, success: res.ok || res.success }))
       .catch((err) => {

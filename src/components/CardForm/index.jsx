@@ -76,17 +76,17 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
     }
   };
 
-  const handleImageUpload = async (cardID, file) => {
-    console.log("Uploading image for cardID:", cardID);
+  const handleImageUpload = async (cardID) => {
+    console.log("cardID: ", cardID);
     try {
-      const formData = new FormData();
-      formData.append("cardID", cardID);
-      formData.append("image", file);
       const response = await request({
         url: "branch/addCardImage",
         method: "POST",
-        body: formData,
-        isfiles: true,
+        body: {
+          cardID: cardID,
+          img: file,
+        },
+        isfile: true,
       });
       return response;
     } catch (error) {
