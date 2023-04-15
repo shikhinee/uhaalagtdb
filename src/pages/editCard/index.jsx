@@ -7,6 +7,7 @@ import {
   CardContent,
   CardHeader,
 } from "@mui/material";
+import Header from "components/Header";
 import { GlobalContext } from "context/state";
 import CardForm from "components/CardForm";
 
@@ -37,9 +38,14 @@ const EditCard = () => {
 
   return (
     <Box>
-      <Card>
-        <CardHeader title="Edit Card" />
-      </Card>
+      <Box m="20px">
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Header
+            title="Карт засах"
+            subtitle="Хувийн мэдээллээ өөрчлөх хүсэлт"
+          />
+        </Box>
+      </Box>
       {cardData && (
         <CardForm
           defaultData={cardData}

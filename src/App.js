@@ -1,12 +1,12 @@
 import { ColorModeContext, useMode } from "./theme";
-import { CssBaseline, ThemeProvider, Snackbar } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { Toaster } from "react-hot-toast";
 import { GlobalProvider } from "context/state";
-import GlobalAlert from "components/GlobalAlert";
 import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import Navbar from "./pages/global/Navbar";
 import Sidebar from "./pages/global/Sidebar";
 import Dashboard from "./pages/dashboard";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { GlobalContext } from "context/state";
 import Invoices from "./pages/invoices";
 import Contacts from "./pages/contacts";
@@ -19,7 +19,6 @@ import EditCard from "pages/editCard";
 import EditCardAdmin from "pages/editCardAdmin";
 import RegisterPage from "pages/register";
 import RoleBasedElement from "components/RoleBasedElement";
-import { SnackbarProvider } from "notistack";
 import UserRequests from "pages/userRequests";
 import Users from "pages/users";
 import Cards from "pages/cards";
@@ -45,7 +44,12 @@ function App() {
   );
 }
 
-function AppContent({ location, isSidebar }) {
+function AppContent({ isSidebar }) {
+  const location = useLocation();
+  useEffect(() => {
+    // Triggered when the location changes
+    console.log("Location changed:", location.pathname);
+  }, [location]);
   const { islogin, login, logout, role } = useContext(GlobalContext);
   console.log(role);
   const showLayout =
@@ -55,11 +59,9 @@ function AppContent({ location, isSidebar }) {
 
   return (
     <>
+      <Toaster />
       {showLayout && <Sidebar isSidebar={isSidebar} />}
       <main className="content">
-        <Snackbar open={alert.open}>
-          <GlobalAlert />
-        </Snackbar>
         {showLayout && <Navbar />}
         <Routes>
           <Route
@@ -239,6 +241,7 @@ function AppContent({ location, isSidebar }) {
             element={!islogin ? <LoginPage /> : <Navigate to="/" replace />}
           />
           <Route
+            key="register"
             path="/register"
             element={!islogin ? <RegisterPage /> : <Navigate to="/" replace />}
           />

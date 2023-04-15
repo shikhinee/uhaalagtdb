@@ -4,13 +4,15 @@ const tokenmsg =
 
 export function request({ url, method, body, isfiles, token }) {
   let Authorization = "Bearer " + token;
+  console.log("Request:", { url, method, body, isfiles, token });
 
   if (isfiles) {
+    console.log("true");
     return fetch(url, {
       method: "POST",
       headers: new Headers({
         Accept: "application/json",
-        // Removed Content-Type header
+        "Content-Type": "multipart/form-data",
         Authorization: Authorization.replace(/"/g, ""),
       }),
       body,
@@ -61,26 +63,27 @@ const fetchRequest = async ({
   model,
   dispatchEvent,
   notification,
-  isfile,
+  isfiles,
   isservice,
   token,
-  showAlert,
+  showToast,
 }) => {
   try {
     if (model) dispatchEvent({ type: model.request });
-    const res = await request({ url, method, body, isfile, isservice, token });
+    const res = await request({ url, method, body, isfiles, isservice, token });
 
     if (model) dispatchEvent({ type: model.response, response: res });
+    console.log("Response from the server:", res);
 
-    if (res.success) {
-      showAlert("Request successful!", "success");
-    } else {
-      showAlert(res.message || "Request failed!", "error");
+    if (!res.success) {
+      showToast(res.message || "Request failed!", {
+        icon: "⚠️",
+        role: "error",
+      });
     }
-
     return res;
   } catch (error) {
-    showAlert("An error occurred during the request.", "error");
+    showToast("An error occurred during the request.", "error");
     return dispatchEvent({
       type: model.error,
       error: error,

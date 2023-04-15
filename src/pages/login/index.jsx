@@ -32,11 +32,15 @@ const LoginPage = () => {
     context.setRole(role);
     context.setlogin(true); // Update the context with the login status
     navigate("/");
+    context.showToast("Logged in successfully!", {
+      icon: "🎉",
+      role: "success",
+    });
   };
   const handleLogin = async (e) => {
     e.preventDefault();
-    context
-      .request({
+    try {
+      const res = await context.request({
         url: `login`,
         model: "login",
         method: "POST",
@@ -44,14 +48,17 @@ const LoginPage = () => {
           username: username,
           password: password,
         },
-      })
-      .then(async (res) => {
-        if (res.success) {
-          await localStorage.setItem("token", JSON.stringify(res.value.token));
-          context.setModel({ model: "login", res: res.value }); // Add this line to update the context with the login response
-          onSuccessLogin(res.value);
-        }
       });
+
+      console.log(res);
+      if (res.success) {
+        await localStorage.setItem("token", JSON.stringify(res.value.token));
+        context.setModel({ model: "login", res: res.value }); // Add this line to update the context with the login response
+        onSuccessLogin(res.value);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   };
 
   return (

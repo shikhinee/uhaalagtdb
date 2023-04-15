@@ -11,7 +11,7 @@ import {
 import { GlobalContext } from "context/state";
 
 const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
-  const { request } = useContext(GlobalContext);
+  const { request, showToast } = useContext(GlobalContext);
   const [formData, setFormData] = useState(
     editMode
       ? defaultData
@@ -46,39 +46,49 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting form:", formData);
+    console.log("File to upload:", file);
     try {
       const response = await request({
         url: editMode ? "branch/editCard" : "branch/addCard",
         method: "POST",
         body: formData,
       });
-      if (response.success) {
-        if (file) {
-          await handleImageUpload(formData.cardID);
-        }
-        onSubmitSuccess();
+      if (response.errors) {
+        console.error("Error submitting card data:", response);
+        return;
       }
+      if (file) {
+        console.log("Uploading image for cardID:", formData.cardID);
+        const imageUploadResponse = await handleImageUpload(
+          formData.cardID,
+          file
+        );
+        if (imageUploadResponse.errors) {
+          console.error("Error uploading card image:", imageUploadResponse);
+          return;
+        }
+        setFormData({ ...formData, imglnk: imageUploadResponse.imglnk });
+      }
+      onSubmitSuccess();
     } catch (error) {
       console.error("Error submitting card data:", error);
     }
   };
 
-  const handleImageUpload = async (cardID) => {
+  const handleImageUpload = async (cardID, file) => {
+    console.log("Uploading image for cardID:", cardID);
     try {
       const formData = new FormData();
       formData.append("cardID", cardID);
       formData.append("image", file);
-      console.log("cardID", cardID);
       const response = await request({
         url: "branch/addCardImage",
         method: "POST",
         body: formData,
-        isfile: true,
+        isfiles: true,
       });
-
-      if (response.success) {
-        setFormData({ ...formData, imglnk: response.imglnk });
-      }
+      return response;
     } catch (error) {
       console.error("Error uploading card image:", error);
     }

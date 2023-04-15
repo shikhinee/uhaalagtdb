@@ -208,7 +208,12 @@ const Branch = () => {
       <Header title="Салбарууд" subtitle="Салбар удирдах хэсэг" />
       <Button
         variant="contained"
-        color="primary"
+        style={{
+          backgroundColor: colors.greenAccent[600],
+          "&:hover": {
+            backgroundColor: colors.greenAccent[700],
+          },
+        }}
         onClick={() => setOpenAddModal(true)}
       >
         Салбар нэмэх

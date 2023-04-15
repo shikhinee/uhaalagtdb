@@ -1,8 +1,7 @@
 import React, { createContext, useReducer, useState } from "react";
 import appReducer from "../reducer";
-import { Snackbar } from "@mui/material";
 import { fetchRequest } from "../fetch";
-import Alert from "@mui/material/Alert";
+import { toast } from "react-hot-toast";
 
 const models = {};
 
@@ -11,41 +10,28 @@ const baseURL = `http://10.150.10.47:8875/api/`;
 export const GlobalContext = createContext();
 const initialState = {
   islogin: Boolean(JSON.parse(localStorage.getItem("token"))),
-  alert: {
-    open: false,
-    message: "",
-    severity: "success",
-  },
 };
 
 export const GlobalProvider = (props) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
   const [islogin, setlogin] = useState(initialState.islogin);
   const [decodedToken, setDecodedToken] = useState(null);
-  const [alert, setAlert] = useState({
-    open: false,
-    message: "",
-    severity: "success",
-  });
 
-  const handleCloseAlert = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setAlert({ ...alert, open: false });
-  };
   const login = () => {
     setlogin(true);
   };
-  const showAlert = (message, severity) => {
-    dispatch({ type: "SET_ALERT", payload: { message, severity } });
-    setTimeout(() => {
-      dispatch({ type: "HIDE_ALERT" });
-    }, 3000);
+  const showToast = (message, options = {}) => {
+    toast(message, {
+      duration: 6000,
+      position: "bottom-right",
+      ...options,
+    });
   };
   const logout = () => {
+    console.log("logout is called");
+    localStorage.removeItem("token");
     setlogin(false);
+    console.log("Token removed from local storage");
   };
   const addmodel = ({ model }) => {
     models[model] = {
@@ -61,12 +47,12 @@ export const GlobalProvider = (props) => {
     body,
     method = "GET",
     token,
-    isfile,
+    isfiles,
   }) => {
     try {
       token = token || localStorage.getItem("token");
 
-      if (isfile && body) {
+      if (isfiles && body) {
         let formData = new FormData();
         Object.keys(body).map((keyname) => {
           formData.append(keyname, body[keyname]);
@@ -82,20 +68,14 @@ export const GlobalProvider = (props) => {
         body,
         model: model ? models[model] : null,
         dispatchEvent: dispatch,
-        isfile: isfile,
+        isfiles: isfiles,
         token: token,
-        showAlert,
+        showToast: showToast,
       });
-      if (res.success) {
-        showAlert("Request successful!", "success");
-      } else {
-        showAlert(res.message || "Request failed!", "error");
-      }
-
       return res;
     } catch (error) {
       console.log("%c 🍬 error: ", error);
-      showAlert("An error occurred during the request.", "error");
+      showToast("An error occurred during the request.", { role: "error" });
     }
   };
   const setModel = ({ model, res }) =>
@@ -108,7 +88,7 @@ export const GlobalProvider = (props) => {
     model,
     body,
     method = "POST",
-    isfile,
+    isfiles,
   }) => {
     try {
       if (model) {
@@ -120,7 +100,6 @@ export const GlobalProvider = (props) => {
         body,
         model: model ? models[model] : null,
         dispatchEvent: dispatch,
-        // isfile: isfile,
       });
       return res;
     } catch (error) {
@@ -142,9 +121,9 @@ export const GlobalProvider = (props) => {
           login,
           logout,
           islogin,
-          showAlert,
           decodedToken,
           setDecodedToken,
+          showToast,
         }}
       >
         {props.children}
