@@ -21,9 +21,9 @@ const RegisterPage = () => {
   const context = useContext(GlobalContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [userID, setUserID] = useState("");
-  const [branchID, setBranchID] = useState(null);
-  const [depID, setDepID] = useState(null);
+  const [userID, setUserID] = useState(null);
+  const [branchID, setBranchID] = useState("");
+  const [depID, setDepID] = useState("");
   const [branches, setBranches] = useState([]);
   const [departments, setDepartments] = useState([]);
   const navigate = useNavigate();
@@ -56,9 +56,11 @@ const RegisterPage = () => {
       .then((res) => {
         if (res.success) {
           setDepartments(res.value);
+        } else {
+          setDepartments([]);
         }
       });
-  }, [branchID]);
+  }, [branchID, context]);
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -69,10 +71,10 @@ const RegisterPage = () => {
         method: "POST",
         ismessage: true,
         body: {
-          userID: userID,
+          userID: parseInt(userID, 10),
           username: username,
           password: password,
-          role: "branchAdmin",
+          role: "",
           branchID: branchID,
           userStatus: "Requested",
           depID: depID,
@@ -119,7 +121,7 @@ const RegisterPage = () => {
                 <TextField
                   required
                   fullWidth
-                  label="Хэрэглэгчийн ID"
+                  label="Ажилтны код"
                   value={userID}
                   onChange={(e) => setUserID(e.target.value)}
                   margin="normal"
@@ -144,61 +146,44 @@ const RegisterPage = () => {
                   margin="normal"
                   sx={{ mb: 2 }}
                 />
-                <Autocomplete
+                <FormControl
                   fullWidth
-                  value={
-                    branchID
-                      ? branches.find((branch) => branch.id === branchID)
-                      : null
-                  }
-                  onChange={(event, newValue) => {
-                    if (newValue) {
-                      setBranchID(newValue.id);
-                    } else {
-                      setBranchID(null);
-                    }
-                  }}
-                  options={branches}
-                  getOptionLabel={(option) => option.branchName}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  filterOptions={(options) => options}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Салбар"
-                      margin="normal"
-                      sx={{ mb: 2 }}
-                      inputProps={{ readOnly: true }}
-                    />
-                  )}
-                />
-                <Autocomplete
+                  margin="normal"
+                  sx={{ mb: 2, minWidth: 240 }}
+                >
+                  <InputLabel htmlFor="branch-select">Салбар</InputLabel>
+                  <Select
+                    value={branchID}
+                    onChange={(e) => setBranchID(e.target.value)}
+                    label="Салбар"
+                  >
+                    {branches.map((branch) => (
+                      <MenuItem key={branch.branchID} value={branch.branchID}>
+                        {branch.branchName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl
                   fullWidth
-                  value={
-                    departments.find((department) => department.id === depID) ||
-                    null
-                  }
-                  onChange={(event, newValue) => {
-                    if (newValue) {
-                      setDepID(newValue.id);
-                    } else {
-                      setDepID("");
-                    }
-                  }}
-                  options={departments}
-                  getOptionLabel={(option) => option.name}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  filterOptions={(options) => options}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Алба"
-                      margin="normal"
-                      sx={{ mb: 2 }}
-                      inputProps={{ readOnly: true }}
-                    />
-                  )}
-                />
+                  margin="normal"
+                  sx={{ mb: 2, minWidth: 240 }}
+                >
+                  <InputLabel htmlFor="department-select">Алба</InputLabel>
+                  <Select
+                    value={depID}
+                    onChange={(e) => setDepID(e.target.value)}
+                    label="Алба"
+                    disabled={!branchID}
+                  >
+                    {departments.map((department) => (
+                      <MenuItem key={department.depID} value={department.depID}>
+                        {department.depName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
                 <Button
                   type="submit"
                   fullWidth

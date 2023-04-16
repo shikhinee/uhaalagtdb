@@ -5,7 +5,7 @@ const tokenmsg =
 export function request({ url, method, body, isfile, token }) {
   console.log("body: ", body);
   let Authorization = "Bearer " + token;
-  console.log("Request:", { url, method, body, isfiles, token });
+  console.log("Request:", { url, method, body, isfile, token });
 
   if (isfile) {
     return fetch(url, {
@@ -63,14 +63,21 @@ const fetchRequest = async ({
   model,
   dispatchEvent,
   notification,
-  isfiles,
+  isfile,
   isservice,
   token,
   showToast,
 }) => {
   try {
     if (model) dispatchEvent({ type: model.request });
-    const res = await request({ url, method, body, isfiles, isservice, token });
+    const res = await request({
+      url,
+      method,
+      body,
+      isfile,
+      isservice,
+      token,
+    });
 
     if (model) dispatchEvent({ type: model.response, response: res });
     console.log("Response from the server:", res);

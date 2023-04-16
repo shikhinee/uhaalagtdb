@@ -47,12 +47,12 @@ export const GlobalProvider = (props) => {
     body,
     method = "GET",
     token,
-    isfiles,
+    isfile,
   }) => {
     try {
       token = token || localStorage.getItem("token");
 
-      if (isfiles && body) {
+      if (isfile && body) {
         let formData = new FormData();
         Object.keys(body).map((keyname) => {
           formData.append(keyname, body[keyname]);
@@ -68,7 +68,7 @@ export const GlobalProvider = (props) => {
         body,
         model: model ? models[model] : null,
         dispatchEvent: dispatch,
-        isfiles: isfiles,
+        isfile: isfile,
         token: token,
         showToast: showToast,
       });
@@ -88,7 +88,7 @@ export const GlobalProvider = (props) => {
     model,
     body,
     method = "POST",
-    isfiles,
+    isfile,
   }) => {
     try {
       if (model) {
