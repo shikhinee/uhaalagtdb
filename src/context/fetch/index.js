@@ -52,7 +52,6 @@ export function request({ url, method, body, isfile, token }) {
     .catch((err) => {
       return {
         success: false,
-        message: `Хүсэлт илгээхэд алдаа гарлаа`,
       };
     });
 }

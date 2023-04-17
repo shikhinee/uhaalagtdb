@@ -10,14 +10,13 @@ import {
 } from "@mui/material";
 import { GlobalContext } from "context/state";
 
-const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
+const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
   const { request, showToast } = useContext(GlobalContext);
   const [formData, setFormData] = useState(
-    editMode
+    editMode || adminMode
       ? defaultData
       : {
-          cardID: "",
-          crdst: true,
+          cardID: "0",
           frstnm: "",
           lstnm: "",
           addrs: "",
@@ -34,10 +33,10 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
   const [file, setFile] = useState(null);
 
   useEffect(() => {
-    if (editMode && defaultData) {
+    if ((editMode || adminMode) && defaultData) {
       setFormData(defaultData);
     }
-  }, [editMode, defaultData]);
+  }, [adminMode, editMode, defaultData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,7 +49,11 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
     console.log("File to upload:", file);
     try {
       const response = await request({
-        url: editMode ? "branch/editCard" : "branch/addCard",
+        url: adminMode
+          ? "branch/editCardAdmin"
+          : editMode
+          ? "branch/editCard"
+          : "branch/addCard",
         method: "POST",
         body: formData,
       });
@@ -80,7 +83,9 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
     console.log("cardID: ", cardID);
     try {
       const response = await request({
-        url: "branch/addCardImage",
+        url: adminMode
+          ? `branch/editCardImage?cardID=${cardID}`
+          : "branch/addCardImage",
         method: "POST",
         body: {
           cardID: cardID,
@@ -101,7 +106,7 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
     <Container maxWidth="sm">
       <Paper elevation={3} sx={{ padding: 3, marginTop: 3 }}>
         <Typography variant="h5" align="center" gutterBottom>
-          {editMode ? "Картны мэдээлэл засах" : "Картны бүртгэл"}
+          {editMode || adminMode ? "Картны мэдээлэл засах" : "Картны бүртгэл"}
         </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -170,15 +175,6 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Ажилтны код"
-                name="cardID"
-                value={formData.cardID}
-                onChange={handleChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 label="Имэйл"
                 name="eml"
                 value={formData.eml}
@@ -215,7 +211,7 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess }) => {
                 sx={{ alignSelf: "center", marginTop: 2 }}
                 fullWidth
               >
-                {editMode ? "Засах" : "Нэмэх"}
+                {editMode || adminMode ? "Засах" : "Нэмэх"}
               </Button>
             </Grid>
           </Grid>

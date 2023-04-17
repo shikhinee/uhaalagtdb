@@ -12,14 +12,14 @@ import { GlobalContext } from "context/state";
 import CardForm from "components/CardForm";
 
 const EditCardAdmin = () => {
-  const { request } = useContext(GlobalContext);
+  const context = useContext(GlobalContext);
   const { cardID } = useParams();
   const [cardData, setCardData] = useState(null);
 
   useEffect(() => {
     const getCardData = async () => {
       try {
-        const response = await request({
+        const response = await context.request({
           url: `branch/getCard?cardID=${cardID}`,
           method: "GET",
           token: localStorage.getItem("token"),
@@ -30,13 +30,14 @@ const EditCardAdmin = () => {
           console.log(cardData);
         }
       } catch (error) {
-        console.error("Error fetching card data:", error);
+        context.showToast(error, {
+          role: "error",
+        });
       }
     };
 
     getCardData();
   }, [cardID]);
-  console.log("test", cardData);
   return (
     <Box>
       <Card>
@@ -45,7 +46,7 @@ const EditCardAdmin = () => {
       {cardData && (
         <CardForm
           defaultData={cardData}
-          editMode
+          adminMode
           onSubmitSuccess={() => setCardData(null)}
         />
       )}

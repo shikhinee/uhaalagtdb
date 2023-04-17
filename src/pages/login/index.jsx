@@ -32,8 +32,7 @@ const LoginPage = () => {
     context.setRole(role);
     context.setlogin(true); // Update the context with the login status
     navigate("/");
-    context.showToast("Logged in successfully!", {
-      icon: "🎉",
+    context.showToast("Амжилттай нэвтэрлээ", {
       role: "success",
     });
   };
@@ -57,7 +56,9 @@ const LoginPage = () => {
         onSuccessLogin(res.value);
       }
     } catch (error) {
-      console.error("Login error:", error);
+      context.showToast(error, {
+        role: "error",
+      });
     }
   };
 

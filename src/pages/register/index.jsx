@@ -83,6 +83,13 @@ const RegisterPage = () => {
       .then((res) => {
         if (res.success) {
           navigate("/");
+          context.showToast("Амжилттай бүртгэгдлээ", {
+            role: "success",
+          });
+        } else {
+          context.showToast(res.value, {
+            role: "success",
+          });
         }
       });
   };

@@ -15,7 +15,7 @@ import Header from "components/Header";
 const CardRequests = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { request } = useContext(GlobalContext);
+  const context = useContext(GlobalContext);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState(10);
@@ -24,7 +24,7 @@ const CardRequests = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const response = await request({
+      const response = await context.request({
         url: `branch/getCardRequests?limit=${limit}&position=${position}`,
         method: "GET",
         model: "getCardRequests",
@@ -41,7 +41,7 @@ const CardRequests = () => {
   const handleAcceptCard = useCallback(
     async (cardID) => {
       try {
-        const response = await request({
+        const response = await context.request({
           url: `branch/acceptCard?cardID=${cardID}`,
           method: "GET",
         });
@@ -49,30 +49,42 @@ const CardRequests = () => {
         if (response.success) {
           // Remove the accepted card from the table
           setRows((rows) => rows.filter((row) => row.cardID !== cardID));
+          context.showToast("Хүсэлт зөвшөөрөгдлөө.", {
+            role: "success",
+          });
         }
       } catch (error) {
+        context.showToast(error, {
+          role: "error",
+        });
         console.error("Error accepting card:", error);
       }
     },
-    [request]
+    [context.request]
   );
   const handleDeclineCard = useCallback(
     async (cardID) => {
       try {
-        const response = await request({
+        const response = await context.request({
           url: `branch/declineCard?cardID=${cardID}`,
           method: "GET",
         });
 
         if (response.success) {
+          context.showToast("Хүсэлт зөвшөөрөгдлөө.", {
+            role: "success",
+          });
           // Remove the declined card from the table
           setRows((rows) => rows.filter((row) => row.cardID !== cardID));
         }
       } catch (error) {
+        context.showToast(error, {
+          role: "error",
+        });
         console.error("Error declining card:", error);
       }
     },
-    [request]
+    [context.request]
   );
   const columns = [
     {

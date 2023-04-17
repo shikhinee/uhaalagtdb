@@ -12,7 +12,7 @@ import { GlobalContext } from "context/state";
 import CardForm from "components/CardForm";
 
 const EditCard = () => {
-  const { request } = useContext(GlobalContext);
+  const context = useContext(GlobalContext);
 
   const [cardData, setCardData] = useState(null);
 
@@ -20,15 +20,21 @@ const EditCard = () => {
     const getCardData = async () => {
       try {
         // Replace this with your request function
-        const response = await request({
+        const response = await context.request({
           url: `branch/getCardByUserId`,
           method: "GET",
         });
 
         if (response.success) {
           setCardData(response.value[0]);
+          context.showToast("Админ хүсэлтийг шалгаж байна.", {
+            role: "success",
+          });
         }
       } catch (error) {
+        context.showToast(error.value, {
+          role: "error",
+        });
         console.error("Error fetching card data:", error);
       }
     };
