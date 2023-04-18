@@ -15,7 +15,7 @@ import Header from "components/Header";
 const UserRequests = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { request } = useContext(GlobalContext);
+  const { request, showToast } = useContext(GlobalContext);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState(10);
@@ -47,9 +47,11 @@ const UserRequests = () => {
         });
 
         if (response.success) {
+          showToast("Ажилтан бүртгэгдлээ", { role: "success" });
           setRows((rows) => rows.filter((row) => row.userID !== userID));
         }
       } catch (error) {
+        showToast(error, { role: "success" });
         console.error("Error accepting user:", error);
       }
     },
@@ -65,9 +67,11 @@ const UserRequests = () => {
         });
 
         if (response.success) {
+          showToast("Хүсэлт устгагдлаа", { role: "success" });
           setRows((rows) => rows.filter((row) => row.userID !== userID));
         }
       } catch (error) {
+        showToast(error, { role: "success" });
         console.error("Error declining user:", error);
       }
     },

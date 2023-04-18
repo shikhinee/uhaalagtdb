@@ -20,7 +20,7 @@ const Branch = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
-  const { request } = useContext(GlobalContext);
+  const context = useContext(GlobalContext);
   console.log(useContext(GlobalContext));
   const [branches, setBranches] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -34,7 +34,7 @@ const Branch = () => {
   };
   useEffect(() => {
     const fetchBranches = async () => {
-      const response = await request({
+      const response = await context.request({
         url: "branch/getBranches",
         model: "getBranches",
       });
@@ -52,7 +52,7 @@ const Branch = () => {
       branchName: newBranch.branchName,
     };
 
-    const response = await request({
+    const response = await context.request({
       url: "branch/addBranch",
       method: "POST",
       body,
@@ -60,6 +60,7 @@ const Branch = () => {
     });
 
     if (response.success) {
+      context.showToast("Салбар нэмэгдлээ.", { role: "success" });
       setBranches((prevBranches) => [...prevBranches, response.value]);
       setNewBranch({ branchName: "" });
     }
@@ -76,7 +77,7 @@ const Branch = () => {
   };
   const handleDeleteConfirm = async () => {
     // Perform the delete request
-    const response = await request({
+    const response = await context.request({
       url: `branch/removeBranch?branchID=${branchToDelete.branchID}`,
       method: "DELETE",
       model: "removeBranch",
@@ -89,6 +90,7 @@ const Branch = () => {
           (branch) => branch.branchID !== branchToDelete.branchID
         )
       );
+      context.showToast("Амжилттай устгагдлаа", { role: "success" });
     }
 
     setOpenDeleteModal(false);
@@ -99,7 +101,7 @@ const Branch = () => {
       branchName: editedBranch.branchName,
     };
 
-    const response = await request({
+    const response = await context.request({
       url: "branch/editBranch",
       method: "POST",
       body,
@@ -113,6 +115,7 @@ const Branch = () => {
           branch.branchID === editedBranch.branchID ? editedBranch : branch
         )
       );
+      context.showToast("Салбарын мэдээллийг шинэчиллээ", { role: "success" });
     }
 
     setOpenModal(false);

@@ -11,7 +11,7 @@ import Header from "components/Header";
 const Users = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { request } = useContext(GlobalContext);
+  const { request, showToast } = useContext(GlobalContext);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState(10);
@@ -46,18 +46,24 @@ const Users = () => {
     setPromoteUserModalOpen(true);
   };
   const confirmResetPassword = async () => {
-    await request({
+    const response = await request({
       url: `user/resetPassword?userID=${selectedUserId}`,
       method: "GET",
     });
+    if (response.success) {
+      showToast("Нууц үг шинэчлэгдлээ");
+    }
     setResetPasswordModalOpen(false);
   };
 
   const confirmPromoteUser = async () => {
-    await request({
+    const response = await request({
       url: `user/addAdmin?userID=${selectedUserId}`,
       method: "GET",
     });
+    if (response.success) {
+      showToast("Тушаал дэвшүүллээ");
+    }
     setPromoteUserModalOpen(false);
   };
   const columns = [

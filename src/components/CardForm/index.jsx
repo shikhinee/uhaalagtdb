@@ -79,7 +79,7 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
       }
       onSubmitSuccess();
     } catch (error) {
-      console.error("Error submitting card data:", error);
+      showToast(error, { role: "error" });
     }
   };
 
@@ -99,7 +99,7 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
       });
       return response;
     } catch (error) {
-      console.error("Error uploading card image:", error);
+      showToast(error, { role: "error" });
     }
   };
 

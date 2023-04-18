@@ -32,10 +32,9 @@ const EditCard = () => {
           });
         }
       } catch (error) {
-        context.showToast(error.value, {
+        context.showToast(error, {
           role: "error",
         });
-        console.error("Error fetching card data:", error);
       }
     };
 

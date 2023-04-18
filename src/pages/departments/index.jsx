@@ -16,7 +16,7 @@ import { useParams } from "react-router-dom";
 const Departments = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { request } = useContext(GlobalContext);
+  const { request, showToast } = useContext(GlobalContext);
   const [departments, setDepartments] = useState([]);
   const { branchID } = useParams();
   const [openAddModal, setOpenAddModal] = useState(false);
@@ -57,6 +57,7 @@ const Departments = () => {
     });
 
     if (response.success) {
+      showToast("Хэлтэс амжилттай нэмэгдлээ", { role: "success" });
       setDepartments([...departments, body]);
       setNewDepartment("");
     }
@@ -82,6 +83,7 @@ const Departments = () => {
     });
 
     if (response.success) {
+      showToast("Хэлтэс амжилттай устгагдлаа", { role: "success" });
       setDepartments((prevDepartments) =>
         prevDepartments.filter(
           (department) => department.depID !== departmentToDelete.depID
@@ -107,6 +109,7 @@ const Departments = () => {
     });
 
     if (response.success) {
+      showToast("Хэлтсийн мэдээлэл шинэчлэгдлээ", { role: "success" });
       setDepartments((prevDepartments) =>
         prevDepartments.map((department) =>
           department.depID === editedDepartment.depID

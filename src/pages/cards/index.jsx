@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 const Cards = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { request } = useContext(GlobalContext);
+  const { request, showToast } = useContext(GlobalContext);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState(10);
@@ -81,8 +81,14 @@ const Cards = () => {
               row.cardID === cardID ? { ...row, crdst: isActive } : row
             )
           );
+          showToast("Картын төлөв солигдлоо", {
+            role: "success",
+          });
         }
       } catch (error) {
+        showToast("Амжилтгүй", {
+          role: "success",
+        });
         console.error("Error toggling card:", error);
       }
     },

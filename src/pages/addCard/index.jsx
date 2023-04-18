@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Typography } from "@mui/material";
 import CardForm from "components/CardForm";
 import Header from "components/Header";
+import { GlobalContext } from "context/state";
 
 const AddCard = () => {
+  const context = useContext(GlobalContext);
   const onSubmitSuccess = () => {
-    console.log("Card added successfully!");
+    context.showToast("Амжилттай!", { role: "success" });
   };
 
   return (
