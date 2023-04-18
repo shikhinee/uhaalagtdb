@@ -82,7 +82,7 @@ const fetchRequest = async ({
     console.log("Response from the server:", res);
 
     if (!res.success) {
-      showToast(res.message || "Request failed!", {
+      showToast(res.value || "Request failed!", {
         icon: "⚠️",
         role: "error",
       });

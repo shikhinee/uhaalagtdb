@@ -79,7 +79,7 @@ const Users = () => {
             text = "Ажилтан";
             bgColor = colors.greenAccent[700];
             break;
-          case "admin":
+          case "Admin":
             icon = <AdminPanelSettingsOutlinedIcon />;
             text = "Админ";
             bgColor = colors.greenAccent[700];

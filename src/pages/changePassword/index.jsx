@@ -14,8 +14,11 @@ const ChangePassword = () => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      alert(
-        "Шинэ нууц үг ба баталгаажуулах нууц үг хоорондоо таарахгүй байна!"
+      context.showToast(
+        "Шинэ нууц үг ба баталгаажуулах нууц үг хоорондоо таарахгүй байна!",
+        {
+          role: "error",
+        }
       );
       return;
     }
@@ -32,7 +35,9 @@ const ChangePassword = () => {
       })
       .then((res) => {
         if (res.success) {
-          alert("Нууц үг амжилттай солигдлоо!");
+          context.showToast("Нууц үг амжилттай солигдлоо!", {
+            role: "success",
+          });
         }
       });
   };
@@ -58,6 +63,22 @@ const ChangePassword = () => {
         value={currentPassword}
         onChange={(e) => setCurrentPassword(e.target.value)}
         fullWidth
+        sx={{
+          "& label.Mui-focused": {
+            color: colors.primary[600], // Change color of label on focus
+          },
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: colors.primary[600], // Change outline color on focus
+            },
+            "& .MuiInputBase-input": {
+              color: colors.primary[600], // Change input text color
+            },
+            "&::placeholder": {
+              color: colors.primary[600], // Change placeholder color
+            },
+          },
+        }}
       />
       <TextField
         required
@@ -66,6 +87,22 @@ const ChangePassword = () => {
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}
         fullWidth
+        sx={{
+          "& label.Mui-focused": {
+            color: colors.primary[600], // Change color of label on focus
+          },
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: colors.primary[600], // Change outline color on focus
+            },
+            "& .MuiInputBase-input": {
+              color: colors.primary[600], // Change input text color
+            },
+            "&::placeholder": {
+              color: colors.primary[600], // Change placeholder color
+            },
+          },
+        }}
       />
       <TextField
         required
@@ -74,6 +111,22 @@ const ChangePassword = () => {
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
         fullWidth
+        sx={{
+          "& label.Mui-focused": {
+            color: colors.primary[600], // Change color of label on focus
+          },
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: colors.primary[600], // Change outline color on focus
+            },
+            "& .MuiInputBase-input": {
+              color: colors.primary[600], // Change input text color
+            },
+            "&::placeholder": {
+              color: colors.primary[600], // Change placeholder color
+            },
+          },
+        }}
       />
       <Button
         color="primary"

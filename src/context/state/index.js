@@ -75,7 +75,7 @@ export const GlobalProvider = (props) => {
       return res;
     } catch (error) {
       console.log("%c 🍬 error: ", error);
-      showToast("An error occurred during the request.", { role: "error" });
+      showToast("Сервэрт алдаа гарлаа", { role: "error" });
     }
   };
   const setModel = ({ model, res }) =>

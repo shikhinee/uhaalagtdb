@@ -249,6 +249,22 @@ const Branch = () => {
             type="text"
             fullWidth
             value={newBranch.branchName}
+            sx={{
+              "& label.Mui-focused": {
+                color: colors.primary[600], // Change color of label on focus
+              },
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: colors.primary[600], // Change outline color on focus
+                },
+                "& .MuiInputBase-input": {
+                  color: colors.primary[600], // Change input text color
+                },
+                "&::placeholder": {
+                  color: colors.primary[600], // Change placeholder color
+                },
+              },
+            }}
             onChange={(e) =>
               setNewBranch({ ...newBranch, branchName: e.target.value })
             }
@@ -373,6 +389,22 @@ const Branch = () => {
             type="text"
             fullWidth
             value={editedBranch?.branchName || ""}
+            sx={{
+              "& label.Mui-focused": {
+                color: colors.primary[600], // Change color of label on focus
+              },
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: colors.primary[600], // Change outline color on focus
+                },
+                "& .MuiInputBase-input": {
+                  color: colors.primary[600], // Change input text color
+                },
+                "&::placeholder": {
+                  color: colors.primary[600], // Change placeholder color
+                },
+              },
+            }}
             onChange={(e) =>
               setEditedBranch((prev) => ({
                 ...prev,

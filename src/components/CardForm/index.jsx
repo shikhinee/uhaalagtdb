@@ -7,11 +7,15 @@ import {
   Paper,
   Container,
   Grid,
+  useTheme,
 } from "@mui/material";
+import { tokens } from "theme";
 import { GlobalContext } from "context/state";
 
 const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
   const { request, showToast } = useContext(GlobalContext);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const [formData, setFormData] = useState(
     editMode || adminMode
       ? defaultData
@@ -104,8 +108,11 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
   };
   return (
     <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ padding: 3, marginTop: 3 }}>
-        <Typography variant="h5" align="center" gutterBottom>
+      <Paper
+        elevation={3}
+        sx={{ padding: 3, marginTop: 3, backgroundColor: colors.primary[400] }}
+      >
+        <Typography sx={{ mb: 2 }} variant="h5" align="center" gutterBottom>
           {editMode || adminMode ? "Картны мэдээлэл засах" : "Картны бүртгэл"}
         </Typography>
         <form onSubmit={handleSubmit}>
@@ -117,6 +124,22 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
                 value={formData.frstnm}
                 onChange={handleChange}
                 fullWidth
+                sx={{
+                  "& label.Mui-focused": {
+                    color: colors.primary[600], // Change color of label on focus
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: colors.primary[600], // Change outline color on focus
+                    },
+                    "& .MuiInputBase-input": {
+                      color: colors.primary[600], // Change input text color
+                    },
+                    "&::placeholder": {
+                      color: colors.primary[600], // Change placeholder color
+                    },
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -126,6 +149,22 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
                 value={formData.lstnm}
                 onChange={handleChange}
                 fullWidth
+                sx={{
+                  "& label.Mui-focused": {
+                    color: colors.primary[600], // Change color of label on focus
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: colors.primary[600], // Change outline color on focus
+                    },
+                    "& .MuiInputBase-input": {
+                      color: colors.primary[600], // Change input text color
+                    },
+                    "&::placeholder": {
+                      color: colors.primary[600], // Change placeholder color
+                    },
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -135,6 +174,22 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
                 value={formData.addrs}
                 onChange={handleChange}
                 fullWidth
+                sx={{
+                  "& label.Mui-focused": {
+                    color: colors.primary[600], // Change color of label on focus
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: colors.primary[600], // Change outline color on focus
+                    },
+                    "& .MuiInputBase-input": {
+                      color: colors.primary[600], // Change input text color
+                    },
+                    "&::placeholder": {
+                      color: colors.primary[600], // Change placeholder color
+                    },
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -144,6 +199,22 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
                 value={formData.phnehome}
                 onChange={handleChange}
                 fullWidth
+                sx={{
+                  "& label.Mui-focused": {
+                    color: colors.primary[600], // Change color of label on focus
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: colors.primary[600], // Change outline color on focus
+                    },
+                    "& .MuiInputBase-input": {
+                      color: colors.primary[600], // Change input text color
+                    },
+                    "&::placeholder": {
+                      color: colors.primary[600], // Change placeholder color
+                    },
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -153,6 +224,22 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
                 value={formData.phnewrk}
                 onChange={handleChange}
                 fullWidth
+                sx={{
+                  "& label.Mui-focused": {
+                    color: colors.primary[600], // Change color of label on focus
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: colors.primary[600], // Change outline color on focus
+                    },
+                    "& .MuiInputBase-input": {
+                      color: colors.primary[600], // Change input text color
+                    },
+                    "&::placeholder": {
+                      color: colors.primary[600], // Change placeholder color
+                    },
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -162,6 +249,22 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
                 value={formData.cmpnnm}
                 onChange={handleChange}
                 fullWidth
+                sx={{
+                  "& label.Mui-focused": {
+                    color: colors.primary[600], // Change color of label on focus
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: colors.primary[600], // Change outline color on focus
+                    },
+                    "& .MuiInputBase-input": {
+                      color: colors.primary[600], // Change input text color
+                    },
+                    "&::placeholder": {
+                      color: colors.primary[600], // Change placeholder color
+                    },
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -171,6 +274,22 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
                 value={formData.pstn}
                 onChange={handleChange}
                 fullWidth
+                sx={{
+                  "& label.Mui-focused": {
+                    color: colors.primary[600], // Change color of label on focus
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: colors.primary[600], // Change outline color on focus
+                    },
+                    "& .MuiInputBase-input": {
+                      color: colors.primary[600], // Change input text color
+                    },
+                    "&::placeholder": {
+                      color: colors.primary[600], // Change placeholder color
+                    },
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -180,6 +299,22 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
                 value={formData.eml}
                 onChange={handleChange}
                 fullWidth
+                sx={{
+                  "& label.Mui-focused": {
+                    color: colors.primary[600], // Change color of label on focus
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: colors.primary[600], // Change outline color on focus
+                    },
+                    "& .MuiInputBase-input": {
+                      color: colors.primary[600], // Change input text color
+                    },
+                    "&::placeholder": {
+                      color: colors.primary[600], // Change placeholder color
+                    },
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -189,6 +324,22 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
                 value={formData.webaddrs}
                 onChange={handleChange}
                 fullWidth
+                sx={{
+                  "& label.Mui-focused": {
+                    color: colors.primary[600], // Change color of label on focus
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: colors.primary[600], // Change outline color on focus
+                    },
+                    "& .MuiInputBase-input": {
+                      color: colors.primary[600], // Change input text color
+                    },
+                    "&::placeholder": {
+                      color: colors.primary[600], // Change placeholder color
+                    },
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -198,6 +349,22 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
                 value={formData.webaddrS_1}
                 onChange={handleChange}
                 fullWidth
+                sx={{
+                  "& label.Mui-focused": {
+                    color: colors.primary[600], // Change color of label on focus
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: colors.primary[600], // Change outline color on focus
+                    },
+                    "& .MuiInputBase-input": {
+                      color: colors.primary[600], // Change input text color
+                    },
+                    "&::placeholder": {
+                      color: colors.primary[600], // Change placeholder color
+                    },
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12}>

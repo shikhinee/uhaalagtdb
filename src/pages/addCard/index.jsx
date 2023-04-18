@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import CardForm from "components/CardForm";
+import Header from "components/Header";
 
 const AddCard = () => {
   const onSubmitSuccess = () => {
@@ -9,9 +10,7 @@ const AddCard = () => {
 
   return (
     <Box>
-      <Typography variant="h4" mb={4}>
-        Add Card
-      </Typography>
+      <Header title="Картаа нэмэх" />
       <CardForm onSubmitSuccess={onSubmitSuccess} />
     </Box>
   );

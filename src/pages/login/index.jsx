@@ -8,10 +8,15 @@ import {
   Container,
   Paper,
   Grid,
+  Link,
+  useTheme,
 } from "@mui/material";
+import { tokens } from "theme";
 import { GlobalContext } from "context/state";
 
 const LoginPage = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const context = useContext(GlobalContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -75,6 +80,7 @@ const LoginPage = () => {
         <Paper
           sx={{
             padding: (theme) => theme.spacing(4),
+            backgroundColor: "#434957",
           }}
         >
           <Typography
@@ -84,7 +90,7 @@ const LoginPage = () => {
               textAlign: "center",
             }}
           >
-            Login
+            Нэвтрэх
           </Typography>
           <form
             onSubmit={handleLogin}
@@ -95,23 +101,68 @@ const LoginPage = () => {
             }}
           >
             <TextField
-              label="Username"
+              label="Нэвтрэх нэр"
               variant="outlined"
               fullWidth
               value={username}
+              sx={{
+                marginBottom: "1rem",
+                "& label.Mui-focused": {
+                  color: colors.primary[600], // Change color of label on focus
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: colors.primary[600], // Change outline color on focus
+                  },
+                  "& .MuiInputBase-input": {
+                    color: colors.primary[600], // Change input text color
+                  },
+                  "&::placeholder": {
+                    color: colors.primary[600], // Change placeholder color
+                  },
+                },
+              }}
               onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
-              label="Password"
+              label="Нууц үг"
               variant="outlined"
               fullWidth
               type="password"
               value={password}
+              sx={{
+                marginBottom: "1rem",
+                "& label.Mui-focused": {
+                  color: colors.primary[600], // Change color of label on focus
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: colors.primary[600], // Change outline color on focus
+                  },
+                  "& .MuiInputBase-input": {
+                    color: colors.primary[600], // Change input text color
+                  },
+                  "&::placeholder": {
+                    color: colors.primary[600], // Change placeholder color
+                  },
+                },
+              }}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button type="submit" variant="contained" fullWidth>
-              Log in
+            <Button sx={{ mb: 2 }} type="submit" variant="contained" fullWidth>
+              Нэвтрэх
             </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link
+                  sx={{ color: colors.primary[600] }}
+                  href="/register"
+                  variant="body2"
+                >
+                  Та бүртгэлгүй юу? Бүртгүүлэх
+                </Link>
+              </Grid>
+            </Grid>
           </form>
         </Paper>
       </Container>

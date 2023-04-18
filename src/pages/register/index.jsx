@@ -13,11 +13,16 @@ import {
   Link,
   Card,
   CardContent,
+  Container,
+  useTheme,
 } from "@mui/material";
+import { tokens } from "theme";
 import Autocomplete from "@mui/lab/Autocomplete";
 import { GlobalContext } from "context/state";
 
 const RegisterPage = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const context = useContext(GlobalContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -103,16 +108,18 @@ const RegisterPage = () => {
           justifyContent: "center",
           alignItems: "center",
           width: "100%",
+          maxWidth: "xs",
         }}
       >
-        <Card sx={{ minWidth: 400, mt: 4 }}>
+        <Card sx={{ maxWidth: "sm", mt: 4, backgroundColor: "#434957" }}>
           <CardContent>
-            <Box
+            <Container
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
+                maxWidth: "xs",
               }}
             >
               <Typography component="h1" variant="h5">
@@ -132,7 +139,23 @@ const RegisterPage = () => {
                   value={userID}
                   onChange={(e) => setUserID(e.target.value)}
                   margin="normal"
-                  sx={{ mb: 2 }}
+                  sx={{
+                    marginBottom: "1rem",
+                    "& label.Mui-focused": {
+                      color: colors.primary[600], // Change color of label on focus
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: colors.primary[600], // Change outline color on focus
+                      },
+                      "& .MuiInputBase-input": {
+                        color: colors.primary[600], // Change input text color
+                      },
+                      "&::placeholder": {
+                        color: colors.primary[600], // Change placeholder color
+                      },
+                    },
+                  }}
                 />
                 <TextField
                   required
@@ -141,7 +164,23 @@ const RegisterPage = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   margin="normal"
-                  sx={{ mb: 2 }}
+                  sx={{
+                    marginBottom: "1rem",
+                    "& label.Mui-focused": {
+                      color: colors.primary[600], // Change color of label on focus
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: colors.primary[600], // Change outline color on focus
+                      },
+                      "& .MuiInputBase-input": {
+                        color: colors.primary[600], // Change input text color
+                      },
+                      "&::placeholder": {
+                        color: colors.primary[600], // Change placeholder color
+                      },
+                    },
+                  }}
                 />
                 <TextField
                   required
@@ -151,12 +190,44 @@ const RegisterPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   margin="normal"
-                  sx={{ mb: 2 }}
+                  sx={{
+                    marginBottom: "1rem",
+                    "& label.Mui-focused": {
+                      color: colors.primary[600], // Change color of label on focus
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: colors.primary[600], // Change outline color on focus
+                      },
+                      "& .MuiInputBase-input": {
+                        color: colors.primary[600], // Change input text color
+                      },
+                      "&::placeholder": {
+                        color: colors.primary[600], // Change placeholder color
+                      },
+                    },
+                  }}
                 />
                 <FormControl
                   fullWidth
                   margin="normal"
-                  sx={{ mb: 2, minWidth: 240 }}
+                  sx={{
+                    marginBottom: "1rem",
+                    "& label.Mui-focused": {
+                      color: colors.primary[600], // Change color of label on focus
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: colors.primary[600], // Change outline color on focus
+                      },
+                      "& .MuiInputBase-input": {
+                        color: colors.primary[600], // Change input text color
+                      },
+                      "&::placeholder": {
+                        color: colors.primary[600], // Change placeholder color
+                      },
+                    },
+                  }}
                 >
                   <InputLabel htmlFor="branch-select">Салбар</InputLabel>
                   <Select
@@ -175,7 +246,24 @@ const RegisterPage = () => {
                 <FormControl
                   fullWidth
                   margin="normal"
-                  sx={{ mb: 2, minWidth: 240 }}
+                  sx={{
+                    minWidth: 250,
+                    marginBottom: "1rem",
+                    "& label.Mui-focused": {
+                      color: colors.primary[600], // Change color of label on focus
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: colors.primary[600], // Change outline color on focus
+                      },
+                      "& .MuiInputBase-input": {
+                        color: colors.primary[600], // Change input text color
+                      },
+                      "&::placeholder": {
+                        color: colors.primary[600], // Change placeholder color
+                      },
+                    },
+                  }}
                 >
                   <InputLabel htmlFor="department-select">Алба</InputLabel>
                   <Select
@@ -202,13 +290,17 @@ const RegisterPage = () => {
                 </Button>
                 <Grid container justifyContent="flex-end">
                   <Grid item>
-                    <Link href="/login" variant="body2">
+                    <Link
+                      sx={{ color: colors.primary[600] }}
+                      href="/login"
+                      variant="body2"
+                    >
                       Та аль хэдийн бүртгэгдсэн байна уу? Нэвтрэх
                     </Link>
                   </Grid>
                 </Grid>
               </form>
-            </Box>
+            </Container>
           </CardContent>
         </Card>
       </Box>
