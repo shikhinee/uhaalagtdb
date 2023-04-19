@@ -7,6 +7,7 @@ import {
   Paper,
   Container,
   Grid,
+  Input,
   useTheme,
 } from "@mui/material";
 import { tokens } from "theme";
@@ -16,6 +17,7 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
   const { request, showToast } = useContext(GlobalContext);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [previewImage, setPreviewImage] = useState();
   const [formData, setFormData] = useState(
     editMode || adminMode
       ? defaultData
@@ -104,7 +106,15 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
   };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      setPreviewImage(event.target.result);
+    };
+
+    reader.readAsDataURL(file);
+    setFile(file);
   };
   return (
     <Container maxWidth="sm">
@@ -367,8 +377,48 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
                 }}
               />
             </Grid>
-            <Grid item xs={12}>
-              <input type="file" onChange={handleFileChange} accept="image/*" />
+            <Grid xs={12} item alignItems="center">
+              <Grid>
+                <Input
+                  type="file"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  id="file-input" // add id attribute
+                  sx={{
+                    display: "none",
+                    "& + label": {
+                      width: "100%",
+                      height: "100%",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "#4cceac", // set background color
+                      color: "white", // set text color
+                      cursor: "pointer",
+                      borderRadius: "4px",
+                      padding: "10px",
+                      "&:hover": {
+                        backgroundColor: "#3da58a", // set hover background color
+                      },
+                    },
+                  }}
+                />
+                <label htmlFor="file-input">
+                  <Typography component="span" sx={{ cursor: "pointer" }}>
+                    Upload Image
+                  </Typography>
+                </label>
+              </Grid>
+              {previewImage && (
+                <Grid item>
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    width="50"
+                    height="50"
+                  />
+                </Grid>
+              )}
             </Grid>
             <Grid item xs={12}>
               <Button
