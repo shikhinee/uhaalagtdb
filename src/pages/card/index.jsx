@@ -160,25 +160,36 @@ const Card = () => {
 
   const handleSaveInfo = async () => {
     if (!user || !cardID) {
-      // Handle the case when user or cardID is not available.
       console.error("User data or cardID is not available.");
       return;
     }
 
-    const response = await request({
-      url: `branch/vcard?cardID=${cardID}`,
-      method: "GET",
-      token: localStorage.getItem("token"),
-    });
+    try {
+      const vCardText = await request({
+        url: `branch/vcard?cardID=${cardID}`,
+        method: "GET",
+        token: localStorage.getItem("token"),
+        iscard: true,
+      });
 
-    if (response.success) {
-      // Do something with the response data, e.g., show a success message or save the contact.
-    } else {
-      // Handle the error case, e.g., show an error message.
+      if (typeof vCardText === "string") {
+        // Process the vCard text as needed
+        const blob = new Blob([vCardText], { type: "text/vcard" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "contact.vcf";
+        a.click();
+        URL.revokeObjectURL(url);
+      } else {
+        console.error("Error: The received data is not a string.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
   if (!user) {
-    return <div>Идэвхигүй карт байна</div>;
+    return <div>Админтай холбогдоно уу</div>;
   }
 
   return (

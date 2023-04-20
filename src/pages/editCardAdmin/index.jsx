@@ -39,7 +39,7 @@ const EditCardAdmin = () => {
     getCardData();
   }, [cardID]);
   return (
-    <Box>
+    <Box m="20px">
       <Card>
         <CardHeader title="Edit Card" />
       </Card>

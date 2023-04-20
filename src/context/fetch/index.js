@@ -2,7 +2,7 @@ import React from "react";
 const tokenmsg =
   "Уучлаарай таны нэвтрэлтийн хугацаа дууссан байна. Та дахин нэвтрэнэ үү.";
 
-export function request({ url, method, body, isfile, token }) {
+export function request({ url, method, body, isfile, token, iscard }) {
   console.log("body: ", body);
   let Authorization = "Bearer " + token;
   console.log("Request:", { url, method, body, isfile, token });
@@ -24,6 +24,37 @@ export function request({ url, method, body, isfile, token }) {
           message: `Хүсэлт илгээхэд алдаа гарлаа`,
           body: body,
           method: method,
+        };
+      });
+  }
+  if (iscard) {
+    return fetch(url, {
+      method,
+      headers: {
+        Accept: "text/vcard, */*",
+        "Content-Type": "application/json, text/plain, */*",
+        Authorization: Authorization.replace(/"/g, ""),
+      },
+      credentials: "include",
+    })
+      .then(async (res) => {
+        if (res.status === 401) {
+          return {
+            ...res,
+            success: true,
+            response: [],
+          };
+        }
+
+        if (res.headers.get("Content-Type") === "text/vcard") {
+          return await res.text();
+        } else {
+          return await res.json();
+        }
+      })
+      .catch((err) => {
+        return {
+          success: false,
         };
       });
   }
@@ -66,6 +97,7 @@ const fetchRequest = async ({
   isservice,
   token,
   showToast,
+  iscard,
 }) => {
   try {
     if (model) dispatchEvent({ type: model.request });
@@ -76,14 +108,14 @@ const fetchRequest = async ({
       isfile,
       isservice,
       token,
+      iscard,
     });
 
     if (model) dispatchEvent({ type: model.response, response: res });
     console.log("Response from the server:", res);
 
     if (!res.success) {
-      showToast(res.value || "Request failed!", {
-        icon: "⚠️",
+      showToast(res.message, {
         role: "error",
       });
     }

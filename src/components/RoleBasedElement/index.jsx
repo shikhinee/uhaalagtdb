@@ -1,18 +1,17 @@
-import React, { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { GlobalContext } from "context/state";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 const RoleBasedElement = ({ allowedRoles, children }) => {
-  const { role } = useContext(GlobalContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!role || !allowedRoles.includes(role)) {
-      navigate("/login");
-    }
-  }, [role, allowedRoles, navigate]);
-
-  return role && allowedRoles.includes(role) ? children : null;
+  const { decodedToken, tokenLoading } = useContext(GlobalContext);
+  if (tokenLoading) {
+    return null;
+  }
+  return allowedRoles.includes(decodedToken.userStatus) ? (
+    <>{children}</>
+  ) : (
+    <Navigate to="/login" replace />
+  );
 };
 
 export default RoleBasedElement;

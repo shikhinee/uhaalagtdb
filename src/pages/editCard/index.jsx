@@ -27,9 +27,6 @@ const EditCard = () => {
 
         if (response.success) {
           setCardData(response.value[0]);
-          context.showToast("Админ хүсэлтийг шалгаж байна.", {
-            role: "success",
-          });
         }
       } catch (error) {
         context.showToast(error, {

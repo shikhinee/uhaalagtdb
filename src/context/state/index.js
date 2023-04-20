@@ -16,6 +16,7 @@ export const GlobalProvider = (props) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
   const [islogin, setlogin] = useState(initialState.islogin);
   const [decodedToken, setDecodedToken] = useState(null);
+  const [tokenLoading, setTokenLoading] = useState(true);
 
   const login = () => {
     setlogin(true);
@@ -124,6 +125,8 @@ export const GlobalProvider = (props) => {
           decodedToken,
           setDecodedToken,
           showToast,
+          tokenLoading,
+          setTokenLoading,
         }}
       >
         {props.children}

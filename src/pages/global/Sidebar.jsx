@@ -22,10 +22,25 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 
-const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
+const Item = ({
+  title,
+  to,
+  icon,
+  selected,
+  setSelected,
+  onClick,
+  allowedRoles,
+}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
+  const { decodedToken } = useContext(GlobalContext);
+  if (
+    allowedRoles &&
+    (!decodedToken || !allowedRoles.includes(decodedToken.userStatus))
+  ) {
+    return null;
+  }
   return (
     <MenuItem
       active={selected === title}
@@ -59,7 +74,8 @@ const Sidebar = () => {
   const [cardID, setCardID] = useState(null);
   const [hasCard, setHasCard] = useState(false);
   const navigate = useNavigate();
-  const { setDecodedToken, decodedToken, request } = useContext(GlobalContext);
+  const { setDecodedToken, decodedToken, request, setTokenLoading } =
+    useContext(GlobalContext);
   console.log(useContext(GlobalContext));
   const branchID = decodedToken ? decodedToken.branchID : null;
   const decodeToken = (token) => {
@@ -118,6 +134,7 @@ const Sidebar = () => {
         fetchCardID();
       }
     }
+    setTokenLoading(false);
   }, []);
   useEffect(() => {
     if (cardID) {
@@ -195,6 +212,7 @@ const Sidebar = () => {
               icon={<HomeOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
+              allowedRoles={["Admin", "branchAdmin", "Accepted"]}
             />
             <Item
               title="Миний Карт"
@@ -219,19 +237,23 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Sector
-            </Typography>
+            {decodedToken &&
+              ["Admin", "branchAdmin"].includes(decodedToken.userStatus) && (
+                <Typography
+                  variant="h6"
+                  color={colors.grey[300]}
+                  sx={{ m: "15px 0 5px 20px" }}
+                >
+                  Бүлэг
+                </Typography>
+              )}
             <Item
               title="Салбар"
               to="/branch"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
+              allowedRoles={["Admin"]}
             />
             {branchID && (
               <Item
@@ -240,21 +262,26 @@ const Sidebar = () => {
                 icon={<MapOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
+                allowedRoles={["Admin", "branchAdmin"]}
               />
             )}
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Employees
-            </Typography>
+            {decodedToken &&
+              ["Admin", "branchAdmin"].includes(decodedToken.userStatus) && (
+                <Typography
+                  variant="h6"
+                  color={colors.grey[300]}
+                  sx={{ m: "15px 0 5px 20px" }}
+                >
+                  Ажилчид
+                </Typography>
+              )}
             <Item
               title="Ажилчид"
               to="/users"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
+              allowedRoles={["Admin", "branchAdmin"]}
             />
             <Item
               title="Шинэ ажилтан"
@@ -262,20 +289,25 @@ const Sidebar = () => {
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
+              allowedRoles={["Admin", "branchAdmin"]}
             />
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Card
-            </Typography>
+            {decodedToken &&
+              ["Admin", "branchAdmin"].includes(decodedToken.userStatus) && (
+                <Typography
+                  variant="h6"
+                  color={colors.grey[300]}
+                  sx={{ m: "15px 0 5px 20px" }}
+                >
+                  Карт
+                </Typography>
+              )}
             <Item
               title="Картнууд"
               to="/cards"
               icon={<CalendarTodayOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
+              allowedRoles={["Admin", "branchAdmin"]}
             />
             <Item
               title="Картны хүсэлтүүд"
@@ -283,6 +315,7 @@ const Sidebar = () => {
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
+              allowedRoles={["Admin", "branchAdmin"]}
             />
           </Box>
         </Menu>

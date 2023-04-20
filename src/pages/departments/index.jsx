@@ -447,8 +447,8 @@ const Departments = () => {
         <DataGrid
           rows={departments}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
           getRowId={(row) => row.depID}
           style={{ height: 400, width: "100%" }}
           sx={{ mt: 2 }}

@@ -50,7 +50,8 @@ function AppContent({ isSidebar }) {
     // Triggered when the location changes
     console.log("Location changed:", location.pathname);
   }, [location]);
-  const { islogin, login, logout, role } = useContext(GlobalContext);
+  const { islogin, login, logout, role, decodedToken } =
+    useContext(GlobalContext);
   console.log(role);
   const showLayout =
     location.pathname !== "/login" &&
@@ -68,17 +69,12 @@ function AppContent({ isSidebar }) {
             path="/"
             element={
               islogin ? (
-                // <RoleBasedElement
-                //   allowedRoles={[
-                //     "admin",
-                //     "branchAdmin",
-                //     "departmentAdmin",
-                //     "user",
-                //   ]}
-                // >
-                <Dashboard />
+                <RoleBasedElement
+                  allowedRoles={["Admin", "branchAdmin", "Accepted"]}
+                >
+                  <Dashboard />
+                </RoleBasedElement>
               ) : (
-                // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
               )
             }
@@ -87,12 +83,10 @@ function AppContent({ isSidebar }) {
             path="/departments/:branchID"
             element={
               islogin ? (
-                // <RoleBasedElement
-                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
-                // >
-                <Departments />
+                <RoleBasedElement allowedRoles={["Admin", "branchAdmin"]}>
+                  <Departments />
+                </RoleBasedElement>
               ) : (
-                // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
               )
             }
@@ -101,12 +95,10 @@ function AppContent({ isSidebar }) {
             path="/branch"
             element={
               islogin ? (
-                // <RoleBasedElement
-                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
-                // >
-                <Branch />
+                <RoleBasedElement allowedRoles={["Admin"]}>
+                  <Branch />
+                </RoleBasedElement>
               ) : (
-                // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
               )
             }
@@ -115,12 +107,10 @@ function AppContent({ isSidebar }) {
             path="/cards"
             element={
               islogin ? (
-                // <RoleBasedElement
-                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
-                // >
-                <Cards />
+                <RoleBasedElement allowedRoles={["Admin", "branchAdmin"]}>
+                  <Cards />
+                </RoleBasedElement>
               ) : (
-                // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
               )
             }
@@ -129,12 +119,10 @@ function AppContent({ isSidebar }) {
             path="/cardRequests"
             element={
               islogin ? (
-                // <RoleBasedElement
-                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
-                // >
-                <CardRequests />
+                <RoleBasedElement allowedRoles={["branchAdmin", "Admin"]}>
+                  <CardRequests />
+                </RoleBasedElement>
               ) : (
-                // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
               )
             }
@@ -143,12 +131,10 @@ function AppContent({ isSidebar }) {
             path="/users"
             element={
               islogin ? (
-                // <RoleBasedElement
-                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
-                // >
-                <Users />
+                <RoleBasedElement allowedRoles={["Admin", "branchAdmin"]}>
+                  <Users />
+                </RoleBasedElement>
               ) : (
-                // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
               )
             }
@@ -157,12 +143,10 @@ function AppContent({ isSidebar }) {
             path="/userrequests"
             element={
               islogin ? (
-                // <RoleBasedElement
-                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
-                // >
-                <UserRequests />
+                <RoleBasedElement allowedRoles={["Admin", "branchAdmin"]}>
+                  <UserRequests />
+                </RoleBasedElement>
               ) : (
-                // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
               )
             }
@@ -171,12 +155,12 @@ function AppContent({ isSidebar }) {
             path="/add"
             element={
               islogin ? (
-                // <RoleBasedElement
-                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
-                // >
-                <AddCard />
+                <RoleBasedElement
+                  allowedRoles={["Admin", "branchAdmin", "Accepted"]}
+                >
+                  <AddCard />
+                </RoleBasedElement>
               ) : (
-                // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
               )
             }
@@ -185,12 +169,12 @@ function AppContent({ isSidebar }) {
             path="/edit"
             element={
               islogin ? (
-                // <RoleBasedElement
-                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
-                // >
-                <EditCard />
+                <RoleBasedElement
+                  allowedRoles={["Admin", "branchAdmin", "Accepted"]}
+                >
+                  <EditCard />
+                </RoleBasedElement>
               ) : (
-                // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
               )
             }
@@ -199,12 +183,10 @@ function AppContent({ isSidebar }) {
             path="/editcardAdmin/:cardID"
             element={
               islogin ? (
-                // <RoleBasedElement
-                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
-                // >
-                <EditCardAdmin />
+                <RoleBasedElement allowedRoles={["Admin", "branchAdmin"]}>
+                  <EditCardAdmin />
+                </RoleBasedElement>
               ) : (
-                // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
               )
             }
@@ -213,12 +195,12 @@ function AppContent({ isSidebar }) {
             path="/changePassword"
             element={
               islogin ? (
-                // <RoleBasedElement
-                //   allowedRoles={["admin", "branchAdmin", "departmentAdmin"]}
-                // >
-                <ChangePassword />
+                <RoleBasedElement
+                  allowedRoles={["Admin", "branchAdmin", "Accepted"]}
+                >
+                  <ChangePassword />
+                </RoleBasedElement>
               ) : (
-                // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
               )
             }
@@ -227,10 +209,10 @@ function AppContent({ isSidebar }) {
             path="/contacts"
             element={
               islogin ? (
-                // <RoleBasedElement allowedRoles={["admin", "branchAdmin"]}>
-                <Contacts />
+                <RoleBasedElement allowedRoles={["Admin"]}>
+                  <Contacts />
+                </RoleBasedElement>
               ) : (
-                // {/* </RoleBasedElement> */}
                 <Navigate to="/login" replace />
               )
             }

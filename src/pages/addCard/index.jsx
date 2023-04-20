@@ -11,7 +11,7 @@ const AddCard = () => {
   };
 
   return (
-    <Box>
+    <Box m="20px">
       <Header title="Картаа нэмэх" />
       <CardForm onSubmitSuccess={onSubmitSuccess} />
     </Box>
