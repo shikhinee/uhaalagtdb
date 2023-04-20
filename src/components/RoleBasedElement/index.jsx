@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 
 const RoleBasedElement = ({ allowedRoles, children }) => {
   const { decodedToken, tokenLoading } = useContext(GlobalContext);
-  if (tokenLoading) {
+  if (tokenLoading || !decodedToken) {
     return null;
   }
   return allowedRoles.includes(decodedToken.userStatus) ? (
