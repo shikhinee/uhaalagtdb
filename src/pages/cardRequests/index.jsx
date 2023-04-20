@@ -20,22 +20,20 @@ const CardRequests = () => {
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState(10);
   const [position, setPosition] = useState(0);
+  const fetchData = async () => {
+    setLoading(true);
+    const response = await context.request({
+      url: `branch/getCardRequests?limit=${limit}&position=${position}`,
+      method: "GET",
+      model: "getCardRequests",
+    });
 
+    if (response.success) {
+      setRows(response.value);
+    }
+    setLoading(false);
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const response = await context.request({
-        url: `branch/getCardRequests?limit=${limit}&position=${position}`,
-        method: "GET",
-        model: "getCardRequests",
-      });
-
-      if (response.success) {
-        setRows(response.value);
-      }
-      setLoading(false);
-    };
-
     fetchData();
   }, [limit, position]);
   const handleAcceptCard = useCallback(
@@ -47,11 +45,11 @@ const CardRequests = () => {
         });
 
         if (response.success) {
-          // Remove the accepted card from the table
-          setRows((rows) => rows.filter((row) => row.cardID !== cardID));
           context.showToast("Хүсэлт зөвшөөрөгдлөө.", {
             role: "success",
           });
+          fetchData();
+          setRows((rows) => rows.filter((row) => row.cardID !== cardID));
         }
       } catch (error) {
         context.showToast(error, {
@@ -75,6 +73,7 @@ const CardRequests = () => {
             role: "success",
           });
           // Remove the declined card from the table
+          fetchData();
           setRows((rows) => rows.filter((row) => row.cardID !== cardID));
         }
       } catch (error) {

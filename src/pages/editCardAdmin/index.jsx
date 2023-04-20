@@ -7,6 +7,7 @@ import {
   CardContent,
   CardHeader,
 } from "@mui/material";
+import Header from "components/Header";
 import { useParams } from "react-router-dom";
 import { GlobalContext } from "context/state";
 import CardForm from "components/CardForm";
@@ -40,9 +41,7 @@ const EditCardAdmin = () => {
   }, [cardID]);
   return (
     <Box m="20px">
-      <Card>
-        <CardHeader title="Edit Card" />
-      </Card>
+      <Header title="Ажилтны карт засах" />
       {cardData && (
         <CardForm
           defaultData={cardData}

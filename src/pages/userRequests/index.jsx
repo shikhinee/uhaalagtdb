@@ -1,12 +1,5 @@
 import React, { useContext, useEffect, useState, useCallback } from "react";
-import {
-  Box,
-  Typography,
-  useTheme,
-  Button,
-  Modal,
-  TextField,
-} from "@mui/material";
+import { Box, useTheme, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { GlobalContext } from "context/state";
@@ -20,21 +13,19 @@ const UserRequests = () => {
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState(10);
   const [position, setPosition] = useState(0);
+  const fetchData = async () => {
+    setLoading(true);
+    const response = await request({
+      url: `user/getUserRequests?limit=${limit}&position=${position}`,
+      method: "GET",
+    });
 
+    if (response.success) {
+      setRows(response.value);
+    }
+    setLoading(false);
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const response = await request({
-        url: `user/getUserRequests?limit=${limit}&position=${position}`,
-        method: "GET",
-      });
-
-      if (response.success) {
-        setRows(response.value);
-      }
-      setLoading(false);
-    };
-
     fetchData();
   }, [limit, position]);
 
@@ -48,6 +39,7 @@ const UserRequests = () => {
 
         if (response.success) {
           showToast("Ажилтан бүртгэгдлээ", { role: "success" });
+          fetchData();
           setRows((rows) => rows.filter((row) => row.userID !== userID));
         }
       } catch (error) {
@@ -68,6 +60,7 @@ const UserRequests = () => {
 
         if (response.success) {
           showToast("Хүсэлт устгагдлаа", { role: "success" });
+          fetchData();
           setRows((rows) => rows.filter((row) => row.userID !== userID));
         }
       } catch (error) {

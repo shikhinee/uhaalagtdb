@@ -88,6 +88,8 @@ const useStyles = makeStyles({
     height: "20px",
     width: "100%",
     padding: "20px 20px",
+    display: "flex",
+    alignItems: "center",
     "&:hover": {
       backgroundColor: "#efefef",
     },
@@ -96,21 +98,29 @@ const useStyles = makeStyles({
     height: "20px",
     width: "100%",
     padding: "20px 20px",
+    display: "flex",
+    alignItems: "center",
   },
   facebook: {
     height: "20px",
     width: "100%",
     padding: "20px 20px",
+    display: "flex",
+    alignItems: "center",
   },
   instagram: {
     height: "20px",
     width: "100%",
     padding: "20px 20px",
+    display: "flex",
+    alignItems: "center",
   },
   linkedin: {
     height: "20px",
     width: "100%",
     padding: "20px 20px",
+    display: "flex",
+    alignItems: "center",
   },
   logo: {
     position: "relative",
@@ -133,7 +143,7 @@ const useStyles = makeStyles({
   },
 });
 const Card = () => {
-  const { decodedToken, request } = useContext(GlobalContext);
+  const { decodedToken, request, baseURL } = useContext(GlobalContext);
   const { cardID } = useParams();
   const [user, setUser] = useState(null);
   const classes = useStyles();
@@ -158,35 +168,17 @@ const Card = () => {
     }
   }, [cardID, request]);
 
-  const handleSaveInfo = async () => {
+  const handleSaveInfo = () => {
     if (!user || !cardID) {
       console.error("User data or cardID is not available.");
       return;
     }
 
-    try {
-      const vCardText = await request({
-        url: `branch/vcard?cardID=${cardID}`,
-        method: "GET",
-        token: localStorage.getItem("token"),
-        iscard: true,
-      });
+    const baseURL = `http://10.150.10.47:8875/api/`;
+    const url = `${baseURL}branch/vcard?cardID=${cardID}`;
 
-      if (typeof vCardText === "string") {
-        // Process the vCard text as needed
-        const blob = new Blob([vCardText], { type: "text/vcard" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "contact.vcf";
-        a.click();
-        URL.revokeObjectURL(url);
-      } else {
-        console.error("Error: The received data is not a string.");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    // Navigate to the URL without the token
+    window.location.href = url;
   };
   if (!user) {
     return <div>Админтай холбогдоно уу</div>;
