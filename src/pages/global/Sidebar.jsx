@@ -44,8 +44,6 @@ const Item = ({
         color: colors.grey[100],
       }}
       onClick={() => {
-        console.log(`Clicked: ${title}`); // Add this line to log the click event
-
         setSelected(title);
         onClick ? onClick() : to && navigate(to);
       }}
@@ -72,7 +70,6 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { setDecodedToken, decodedToken, request, setTokenLoading } =
     useContext(GlobalContext);
-  console.log(useContext(GlobalContext));
   const branchID = decodedToken ? decodedToken.branchID : null;
   const decodeToken = (token) => {
     try {
@@ -84,21 +81,15 @@ const Sidebar = () => {
     }
   };
   const handleMyCardClick = async () => {
-    console.log("handlecardclick called");
     if (decodedToken) {
-      console.log(decodedToken.userID);
       const userId = decodedToken.userID;
 
       const response = await request({
         url: `branch/getCardByUserId`,
         method: "GET",
       });
-      console.log("API response:", response); // Add this line to log the response
-
       if (response.success) {
         if (response.value && response.value.length > 0) {
-          console.log("Setting cardID to:", response.value[0].cardID); // Add this line to log the new cardID value
-          console.log(cardID);
           setCardID(response.value[0].cardID);
         } else {
           navigate("/add");

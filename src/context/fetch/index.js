@@ -3,9 +3,7 @@ const tokenmsg =
   "Уучлаарай таны нэвтрэлтийн хугацаа дууссан байна. Та дахин нэвтрэнэ үү.";
 
 export function request({ url, method, body, isfile, token, iscard }) {
-  console.log("body: ", body);
   let Authorization = "Bearer " + token;
-  console.log("Request:", { url, method, body, isfile, token });
 
   if (isfile) {
     return fetch(url, {
@@ -112,7 +110,6 @@ const fetchRequest = async ({
     });
 
     if (model) dispatchEvent({ type: model.response, response: res });
-    console.log("Response from the server:", res);
 
     if (!res.success) {
       showToast(res.message, {

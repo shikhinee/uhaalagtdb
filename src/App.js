@@ -48,11 +48,9 @@ function AppContent({ isSidebar }) {
   const location = useLocation();
   useEffect(() => {
     // Triggered when the location changes
-    console.log("Location changed:", location.pathname);
   }, [location]);
   const { islogin, login, logout, role, decodedToken } =
     useContext(GlobalContext);
-  console.log(role);
   const showLayout =
     location.pathname !== "/login" &&
     location.pathname !== "/register" &&

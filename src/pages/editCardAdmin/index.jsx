@@ -28,7 +28,6 @@ const EditCardAdmin = () => {
 
         if (response.success) {
           setCardData(response.value);
-          console.log(cardData);
         }
       } catch (error) {
         context.showToast(error, {

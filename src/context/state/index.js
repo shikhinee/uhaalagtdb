@@ -1,7 +1,8 @@
-import React, { createContext, useReducer, useState } from "react";
+import React, { createContext, useReducer, useState, useEffect } from "react";
 import appReducer from "../reducer";
 import { fetchRequest } from "../fetch";
 import { toast } from "react-hot-toast";
+import TokenExpiredModal from "components/TokenExpiredModal";
 
 const models = {};
 
@@ -17,7 +18,17 @@ export const GlobalProvider = (props) => {
   const [islogin, setlogin] = useState(initialState.islogin);
   const [decodedToken, setDecodedToken] = useState(null);
   const [tokenLoading, setTokenLoading] = useState(true);
+  const [tokenExpiredModalOpen, setTokenExpiredModalOpen] = useState(false);
 
+  useEffect(() => {
+    const tokenValidityInterval = setInterval(() => {
+      checkTokenValidity();
+    }, 60000); // Check every minute (60000 milliseconds)
+
+    return () => {
+      clearInterval(tokenValidityInterval);
+    };
+  }, [islogin]);
   const login = () => {
     setlogin(true);
   };
@@ -29,10 +40,8 @@ export const GlobalProvider = (props) => {
     });
   };
   const logout = () => {
-    console.log("logout is called");
     localStorage.removeItem("token");
     setlogin(false);
-    console.log("Token removed from local storage");
   };
   const addmodel = ({ model }) => {
     models[model] = {
@@ -77,6 +86,19 @@ export const GlobalProvider = (props) => {
     } catch (error) {
       console.log("%c 🍬 error: ", error);
       showToast("Сервэрт алдаа гарлаа", { role: "error" });
+    }
+  };
+  const checkTokenValidity = async () => {
+    if (islogin) {
+      try {
+        const response = await request({ url: "checkToken" });
+        if (!response.success) {
+          logout();
+          setTokenExpiredModalOpen(true);
+        }
+      } catch (error) {
+        console.log("Error checking token validity:", error);
+      }
     }
   };
   const setModel = ({ model, res }) =>
@@ -130,6 +152,10 @@ export const GlobalProvider = (props) => {
         }}
       >
         {props.children}
+        <TokenExpiredModal
+          open={tokenExpiredModalOpen}
+          onModalClose={() => setTokenExpiredModalOpen(false)}
+        />
       </GlobalContext.Provider>
     </React.Fragment>
   );

@@ -51,8 +51,6 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting form:", formData);
-    console.log("File to upload:", file);
     try {
       const response = await request({
         url: adminMode
@@ -68,7 +66,6 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
         return;
       }
       if (file) {
-        console.log("Uploading image for cardID:", formData.cardID);
         const imageUploadResponse = await handleImageUpload(
           formData.cardID,
           file
@@ -86,7 +83,6 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
   };
 
   const handleImageUpload = async (cardID) => {
-    console.log("cardID: ", cardID);
     try {
       const response = await request({
         url: adminMode

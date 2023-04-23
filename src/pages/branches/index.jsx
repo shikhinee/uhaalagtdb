@@ -21,7 +21,6 @@ const Branch = () => {
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
   const context = useContext(GlobalContext);
-  console.log(useContext(GlobalContext));
   const [branches, setBranches] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [editedBranch, setEditedBranch] = useState(null);

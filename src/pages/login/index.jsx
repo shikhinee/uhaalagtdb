@@ -21,7 +21,6 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  console.log(context.role);
 
   const onSuccessLogin = async ({ token, role }) => {
     context.request({
@@ -54,7 +53,6 @@ const LoginPage = () => {
         },
       });
 
-      console.log(res);
       if (res.success) {
         await localStorage.setItem("token", JSON.stringify(res.value.token));
         context.setModel({ model: "login", res: res.value }); // Add this line to update the context with the login response

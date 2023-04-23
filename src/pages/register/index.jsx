@@ -32,7 +32,6 @@ const RegisterPage = () => {
   const [branches, setBranches] = useState([]);
   const [departments, setDepartments] = useState([]);
   const navigate = useNavigate();
-  console.log("register page rendered");
 
   useEffect(() => {
     context
