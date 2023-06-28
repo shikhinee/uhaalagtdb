@@ -174,7 +174,7 @@ const Card = () => {
       return;
     }
 
-    const baseURL = `http://10.150.10.47:8875/api/`;
+    const baseURL = `http://10.150.10.48:8875/api/`;
     const url = `${baseURL}branch/vcard?cardID=${cardID}`;
 
     // Navigate to the URL without the token
