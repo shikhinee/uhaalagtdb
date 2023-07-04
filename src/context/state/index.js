@@ -6,7 +6,7 @@ import TokenExpiredModal from "components/TokenExpiredModal";
 
 const models = {};
 
-const baseURL = `http://10.150.10.47:8875/api/`;
+const baseURL = `https://bcard.tdbm.mn/api/`;
 
 export const GlobalContext = createContext();
 const initialState = {
