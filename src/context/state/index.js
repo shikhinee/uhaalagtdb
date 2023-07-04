@@ -23,7 +23,7 @@ export const GlobalProvider = (props) => {
   useEffect(() => {
     const tokenValidityInterval = setInterval(() => {
       checkTokenValidity();
-    }, 60000); // Check every minute (60000 milliseconds)
+    }, 3000); // Check every minute (60000 milliseconds)
 
     return () => {
       clearInterval(tokenValidityInterval);
