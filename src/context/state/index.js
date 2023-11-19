@@ -6,7 +6,9 @@ import TokenExpiredModal from "components/TokenExpiredModal";
 
 const models = {};
 
-const baseURL = `https://bcard.tdbm.mn/api/`;
+// const baseURL = `https://bcard.tdbm.mn/api/`;
+
+const baseURL = `http://localhost:8875/api/`;
 
 export const GlobalContext = createContext();
 const initialState = {
@@ -20,15 +22,16 @@ export const GlobalProvider = (props) => {
   const [tokenLoading, setTokenLoading] = useState(true);
   const [tokenExpiredModalOpen, setTokenExpiredModalOpen] = useState(false);
 
-  useEffect(() => {
-    const tokenValidityInterval = setInterval(() => {
-      checkTokenValidity();
-    }, 3000); // Check every minute (60000 milliseconds)
+  // useEffect(() => {
+  //   const tokenValidityInterval = setInterval(() => {
+  //     checkTokenValidity();
+  //   }, 3000); // Check every minute (60000 milliseconds)
 
-    return () => {
-      clearInterval(tokenValidityInterval);
-    };
-  }, [islogin]);
+  //   return () => {
+  //     clearInterval(tokenValidityInterval);
+  //   };
+  // }, [islogin]);
+
   const login = () => {
     setlogin(true);
   };
@@ -43,6 +46,7 @@ export const GlobalProvider = (props) => {
     localStorage.removeItem("token");
     setlogin(false);
   };
+
   const addmodel = ({ model }) => {
     models[model] = {
       request: `request_${model}`,
@@ -51,15 +55,35 @@ export const GlobalProvider = (props) => {
     };
   };
 
+  const checkTokenValidity = async () => {
+    if (islogin) {
+      try {
+        const response = await request({
+          url: "checkToken",
+          checkToken: false,
+        });
+        if (!response.success) {
+          logout();
+          setTokenExpiredModalOpen(true);
+        }
+      } catch (error) {
+        console.log("Error checking token validity:", error);
+      }
+    }
+  };
+
   const request = async ({
     url,
     model,
     body,
     method = "GET",
     token,
+    checkToken = true,
     isfile,
   }) => {
     try {
+      if (islogin && checkToken) checkTokenValidity();
+
       token = token || localStorage.getItem("token");
 
       if (isfile && body) {
@@ -86,19 +110,6 @@ export const GlobalProvider = (props) => {
     } catch (error) {
       console.log("%c 🍬 error: ", error);
       showToast("Сервэрт алдаа гарлаа", { role: "error" });
-    }
-  };
-  const checkTokenValidity = async () => {
-    if (islogin) {
-      try {
-        const response = await request({ url: "checkToken" });
-        if (!response.success) {
-          logout();
-          setTokenExpiredModalOpen(true);
-        }
-      } catch (error) {
-        console.log("Error checking token validity:", error);
-      }
     }
   };
   const setModel = ({ model, res }) =>
