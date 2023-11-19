@@ -210,9 +210,15 @@ const Card = () => {
       return;
     }
 
+<<<<<<< Updated upstream
     // const baseURL = `https://bcard.tdbm.mn/api/`;
     const baseURL = `https://bcard.tdbm.mn/api/`;
 
+=======
+    const baseURL = `http://bcard.tdbmlabs.mn:8042/api/`;
+
+    // const baseURL = `http://10.150.10.47:8875/api/`;
+>>>>>>> Stashed changes
     const url = `${baseURL}branch/vcard?cardID=${cardID}`;
 
     // Navigate to the URL without the token
