@@ -30,7 +30,7 @@ export function request({ url, method, body, isfile, token, iscard }) {
       method,
       headers: {
         Accept: "text/vcard, */*",
-        "Content-Type": "application/json, text/plain, */*",
+        "Content-Type": "application/json",
         Authorization: Authorization.replace(/"/g, ""),
       },
       credentials: "include",
@@ -60,8 +60,8 @@ export function request({ url, method, body, isfile, token, iscard }) {
   return fetch(url, {
     method,
     headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json, text/plain, */*",
+      Accept: "*/*",
+      "Content-Type": "application/json",
       Authorization: Authorization.replace(/"/g, ""),
     },
     credentials: "include",
