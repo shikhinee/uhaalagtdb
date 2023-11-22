@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Typography, Avatar, Link } from "@mui/material";
+import { Box, Typography, Avatar, Link, CircularProgress } from "@mui/material";
 import { GlobalContext } from "context/state";
 import { makeStyles } from "@mui/styles";
 import background from "../../assets/background-pattern.png";
 import asd from "../../assets/asd.png";
 import nfc from "../../assets/nfc.png";
-import tdblogo from "../../assets/tdb-log.png";
+import tdblogo from "../../assets/tdb-logo.png";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -14,7 +14,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 const useStyles = makeStyles({
   container: {
     display: "flex",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#fff",
     width: "100%",
     height: "100%",
     justifyContent: "center",
@@ -29,20 +29,24 @@ const useStyles = makeStyles({
       "4px 0 15px -4px rgba(31, 73, 125, 0.8), -4px 0 8px -4px rgba(31, 73, 125, 0.8)",
     flexDirection: "column",
     alignItems: "center",
+    position: "relative",
+    backgroundColor: "#fff",
   },
   cover: {
     width: "100%",
-    height: "30vh",
-    position: "relative",
+    height: "33vh",
     backgroundColor: "#0E94D2",
     backgroundImage: `url(${background})`,
-  },
-  nfclogo: {
-    right: 10,
-    bottom: 10,
     position: "absolute",
   },
+  nfclogo: {
+    right: "6%",
+    bottom: "15%",
+    position: "absolute",
+    width: "6%",
+  },
   mainlogo: {
+    width: "30%",
     top: "30%",
     left: "50%",
     position: "absolute",
@@ -50,12 +54,15 @@ const useStyles = makeStyles({
   },
   info: {
     width: "100%",
-    height: "45vh",
-
+    height: "69%",
+    position: "absolute",
+    top: "33%",
     // backdropFilter: "blur(5px)", // Apply blur effect
     // backgroundSize: "cover", // Resize the background image to
     boxShadow: "none",
     backgroundImage: `url(${asd})`,
+    backdropFilter: "blur(10px)",
+    backgroundColor: "rgba(0,0,30,0.4)",
   },
   contact: {
     display: "flex",
@@ -70,31 +77,32 @@ const useStyles = makeStyles({
   },
   image: {
     height: "150px",
-    width: "200px",
-    transform: "translateY(-50%)",
+    width: "180px",
+    transform: "translateY(-70%)",
     margin: "auto",
   },
   userinfo: {
-    width: "80%",
+    width: "66%",
     margin: "auto",
     flexDirection: "column",
     alignItems: "flex-start",
-    // transform: "translateY(-20%)",
+    transform: "translateY(-20%)",
   },
   name: {
     "& h2": {
+      fontSize: 26,
       color: "#0E94D2",
-      fontWeight: 500,
+      fontWeight: 600,
     },
   },
   position: {
-    margin: "6px 0",
-    fontSize: "16px",
+    margin: "2px 0",
+    fontSize: 18,
     color: "#4D4D4F",
-    fontWeight: 500,
+    fontWeight: 400,
   },
   contactinfo: {
-    width: "80%",
+    width: "100%",
     height: "100%",
 
     display: "flex",
@@ -111,7 +119,7 @@ const useStyles = makeStyles({
   phone: {
     height: "20px",
     width: "100%",
-    padding: "20px 20px",
+    padding: "17px 0px",
     display: "flex",
     alignItems: "center",
     "&:hover": {
@@ -121,28 +129,28 @@ const useStyles = makeStyles({
   mail: {
     height: "20px",
     width: "100%",
-    padding: "20px 20px",
+    padding: "17px 0px",
     display: "flex",
     alignItems: "center",
   },
   facebook: {
     height: "20px",
     width: "100%",
-    padding: "20px 20px",
+    padding: "17px 0px",
     display: "flex",
     alignItems: "center",
   },
   instagram: {
     height: "20px",
     width: "100%",
-    padding: "20px 20px",
+    padding: "17px 0px",
     display: "flex",
     alignItems: "center",
   },
   linkedin: {
     height: "20px",
     width: "100%",
-    padding: "20px 20px",
+    padding: "17px 0px",
     display: "flex",
     alignItems: "center",
   },
@@ -157,7 +165,9 @@ const useStyles = makeStyles({
     color: "#4D4D4F",
     display: "flex",
     width: "100%",
+    fontSize: 18,
     justifyContent: "space-between",
+    color: "#000",
     "& button": {
       padding: "5px 20px",
       backgroundColor: "#2e7cf6",
@@ -176,6 +186,9 @@ const useStyles = makeStyles({
       border: "none",
       margin: "auto",
     },
+    fontSize: 16,
+    fontWeight: "300",
+    marginTop: 10,
   },
 });
 const Card = () => {
@@ -204,28 +217,49 @@ const Card = () => {
     }
   }, [cardID, request]);
 
-  const handleSaveInfo = () => {
+  const handleSaveInfo = async () => {
     if (!user || !cardID) {
       console.error("User data or cardID is not available.");
       return;
     }
 
-<<<<<<< Updated upstream
-    // const baseURL = `https://bcard.tdbm.mn/api/`;
     const baseURL = `https://bcard.tdbm.mn/api/`;
 
-=======
-    const baseURL = `http://bcard.tdbmlabs.mn:8042/api/`;
-
-    // const baseURL = `http://10.150.10.47:8875/api/`;
->>>>>>> Stashed changes
     const url = `${baseURL}branch/vcard?cardID=${cardID}`;
-
-    // Navigate to the URL without the token
-    window.location.href = url;
+    try {
+      // Replace 'your-api-endpoint' with the endpoint to fetch the file
+      const response = await fetch(url, {
+        method: "GET",
+      });
+      console.log(response);
+      if (response.ok) {
+        // Create a Blob from the PDF stream
+        const blob = await response.blob();
+        // Create a link element, use it to download the blob, and then delete it
+        const link = document.createElement("a");
+        // Create a URL for the blob
+        link.href = window.URL.createObjectURL(blob);
+        // Set link properties
+        link.download = `${user.frstnm}.vcf`; // The file name you want the file to be downloaded with
+        document.body.appendChild(link);
+        // Trigger the download
+        link.click();
+        // Clean up by revoking the Object URL and removing the link element
+        window.URL.revokeObjectURL(link.href);
+        document.body.removeChild(link);
+      } else {
+        throw new Error("Network response was not ok.");
+      }
+    } catch (error) {
+      console.error("Failed to download file:", error);
+    }
   };
   if (!user) {
-    return <div>Админтай холбогдоно уу</div>;
+    return (
+      <div className={classes.container}>
+        <CircularProgress color="secondary" />
+      </div>
+    );
   }
 
   return (
@@ -242,8 +276,8 @@ const Card = () => {
         <div className={classes.info}>
           <div className={classes.image}>
             <Avatar
-              style={{ width: "200px", height: "200px" }}
-              src={user.imglnk}
+              style={{ width: "180px", height: "180px" }}
+              src={`data:image/jpeg;base64, ${user.imglnk}`}
               alt="user image"
             />
           </div>
@@ -257,43 +291,52 @@ const Card = () => {
               </Typography>
             </div>
             <div className={classes.position}>
-              <Typography variant="h6">{user.pstn}</Typography>
+              <span variant="h6">{user.pstn}</span>
+            </div>
+            <div className={classes.position}>
+              <span variant="h6">{user.branchName}</span>
             </div>
             <div className={classes.company}>
-              <Typography variant="body1">{user.cmpnnm}</Typography>
+              <span variant="h6">{user.cmpnnm}</span>
             </div>
             <div className={classes.saveContact}>
               <button className={classes.saveContact} onClick={handleSaveInfo}>
                 Save Contact
               </button>
             </div>
-          </div>
-        </div>
-        <div className={classes.contact}>
-          <div className={classes.contactinfo}>
-            <div className={classes.phone}>
-              <Link href={`tel:${user.phnehome}`}>
-                <PhoneIcon className={classes.logo} />
-                {user.phnehome}
-              </Link>
-            </div>
-            <div className={classes.mail}>
-              <Link href={`mailto:${user.eml}`}>
-                <EmailIcon className={classes.logo} />
-                {user.eml}
-              </Link>
-            </div>
-            <div className={classes.facebook}>
-              <Link href={`${user.webaddrs}`}>
-                <FacebookIcon className={classes.logo} />
-                {user.frstnm} {user.lstnm}
-              </Link>
-            </div>
-            <div className={classes.instagram}>
-              <Link href={`${user.webaddrS_1}`}>
-                <InstagramIcon className={classes.logo} />
-                {user.webaddrS_1}
-              </Link>
+            <div className={classes.contactinfo}>
+              {user.phnehome && (
+                <div className={classes.phone}>
+                  <Link href={`tel:${user.phnehome}`}>
+                    <PhoneIcon className={classes.logo} />
+                    {user.phnehome}
+                  </Link>
+                </div>
+              )}
+              {user.eml && (
+                <div className={classes.mail}>
+                  <Link href={`mailto:${user.eml}`}>
+                    <EmailIcon className={classes.logo} />
+                    {user.eml}
+                  </Link>
+                </div>
+              )}
+              {user.webaddrs && (
+                <div className={classes.facebook}>
+                  <Link href={`${user.webaddrs}`}>
+                    <FacebookIcon className={classes.logo} />
+                    {user.frstnm} {user.lstnm}
+                  </Link>
+                </div>
+              )}
+              {user.webaddrS_1 && (
+                <div className={classes.instagram}>
+                  <Link href={`${user.webaddrS_1}`}>
+                    <InstagramIcon className={classes.logo} />
+                    {user.webaddrS_1}
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>

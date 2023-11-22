@@ -34,10 +34,9 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
           eml: "",
           webaddrs: "",
           webaddrS_1: "",
+          imageFile: null,
         }
   );
-  const [file, setFile] = useState(null);
-
   useEffect(() => {
     if ((editMode || adminMode) && defaultData) {
       setFormData(defaultData);
@@ -51,56 +50,34 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await request({
-        url: adminMode
-          ? "branch/editCardAdmin"
-          : editMode
-          ? "branch/editCard"
-          : "branch/addCard",
-        method: "POST",
-        body: formData,
-      });
-      if (response.errors) {
-        console.error("Error submitting card data:", response);
-        return;
+    if (!editMode && !adminMode && formData.imageFile === null) {
+      showToast("Зургаа оруулна уу", { role: "error" });
+    } else {
+      try {
+        request({
+          url: adminMode
+            ? "branch/editCardAdmin"
+            : editMode
+            ? "branch/editCard"
+            : "branch/addCard",
+          method: "POST",
+          isfile: true,
+          body: formData,
+        }).then((response) => {
+          console.log(response);
+          if (!response.success && !response.message) {
+            showToast("Бүх талбарыг бөглөнө үү", { role: "error" });
+            return;
+          } else if (response.success !== false) {
+            console.log("shi");
+            showToast(response.message, { role: "success" });
+          }
+        });
+      } catch (error) {
+        showToast(error, { role: "error" });
       }
-      if (file) {
-        const imageUploadResponse = await handleImageUpload(
-          formData.cardID,
-          file
-        );
-        if (imageUploadResponse.errors) {
-          console.error("Error uploading card image:", imageUploadResponse);
-          return;
-        }
-        setFormData({ ...formData, imglnk: imageUploadResponse.imglnk });
-      }
-      onSubmitSuccess();
-    } catch (error) {
-      showToast(error, { role: "error" });
     }
   };
-
-  const handleImageUpload = async (cardID) => {
-    try {
-      const response = await request({
-        url: adminMode
-          ? `branch/editCardImage?cardID=${cardID}`
-          : "branch/addCardImage",
-        method: "POST",
-        body: {
-          cardID: cardID,
-          img: file,
-        },
-        isfile: true,
-      });
-      return response;
-    } catch (error) {
-      showToast(error, { role: "error" });
-    }
-  };
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -110,8 +87,9 @@ const CardForm = ({ defaultData, editMode, onSubmitSuccess, adminMode }) => {
     };
 
     reader.readAsDataURL(file);
-    setFile(file);
+    setFormData((prev) => ({ ...prev, imageFile: file }));
   };
+
   return (
     <Container maxWidth="sm">
       <Paper

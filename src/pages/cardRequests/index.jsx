@@ -6,6 +6,7 @@ import {
   Button,
   Modal,
   TextField,
+  Avatar,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
@@ -134,7 +135,18 @@ const CardRequests = () => {
     { field: "addrs", headerName: "Хаяг", width: 200 },
     { field: "phnehome", headerName: "Гар утасны дугаар", width: 150 },
     { field: "phnewrk", headerName: "Ажлын утасны дугаар", width: 150 },
-    { field: "imglnk", headerName: "Зургийн холбоос", width: 200 },
+    {
+      field: "imglnk",
+      headerName: "Зургийн холбоос",
+      width: 200,
+      renderCell: (params) => (
+        <Avatar
+          style={{ width: "200px", height: "200px" }}
+          src={`data:image/jpeg;base64, ${params.row.imglnk}`}
+          alt="user image"
+        />
+      ),
+    },
     { field: "cmpnnm", headerName: "Компанийн нэр", width: 150 },
     { field: "pstn", headerName: "Албан тушаал", width: 150 },
     { field: "eml", headerName: "И-мэйл", width: 200 },

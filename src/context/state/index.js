@@ -6,13 +6,9 @@ import TokenExpiredModal from "components/TokenExpiredModal";
 
 const models = {};
 
-<<<<<<< Updated upstream
-// const baseURL = `https://bcard.tdbm.mn/api/`;
+const baseURL = `https://bcard.tdbm.mn/api/`;
 
-const baseURL = `http://localhost:8875/api/`;
-=======
-const baseURL = `http://bcard.tdbmlabs.mn:8042/api/`;
->>>>>>> Stashed changes
+// const baseURL = `http://10.150.10.70:8875/api/`;
 
 export const GlobalContext = createContext();
 const initialState = {
@@ -70,9 +66,7 @@ export const GlobalProvider = (props) => {
           logout();
           setTokenExpiredModalOpen(true);
         }
-      } catch (error) {
-        console.log("Error checking token validity:", error);
-      }
+      } catch (error) {}
     }
   };
 
@@ -112,7 +106,6 @@ export const GlobalProvider = (props) => {
       });
       return res;
     } catch (error) {
-      console.log("%c 🍬 error: ", error);
       showToast("Сервэрт алдаа гарлаа", { role: "error" });
     }
   };
@@ -140,9 +133,7 @@ export const GlobalProvider = (props) => {
         dispatchEvent: dispatch,
       });
       return res;
-    } catch (error) {
-      console.log("%c 🍬 error: ", error);
-    }
+    } catch (error) {}
   };
 
   return (

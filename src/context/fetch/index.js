@@ -15,7 +15,10 @@ export function request({ url, method, body, isfile, token, iscard }) {
       }),
       body: body,
     })
-      .then((res) => ({ ...res, success: res.ok || res.success }))
+      .then((res) => {
+        const data = res.json();
+        return data;
+      })
       .catch((err) => {
         return {
           success: false,
@@ -111,8 +114,8 @@ const fetchRequest = async ({
 
     if (model) dispatchEvent({ type: model.response, response: res });
 
-    if (!res.success) {
-      showToast(res.message, {
+    if (!res.success && res.message) {
+      showToast(res.value, {
         role: "error",
       });
     }
